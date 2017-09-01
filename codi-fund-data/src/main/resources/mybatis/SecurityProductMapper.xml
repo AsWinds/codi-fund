@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.SecurityProduct">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.SecurityProduct">
+		<result column="ID" property="id" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="CompanyCode" property="companyCode" jdbcType="INTEGER" />
+		<result column="SecuCode" property="secuCode" jdbcType="VARCHAR" />
+		<result column="ChiName" property="chiName" jdbcType="VARCHAR" />
+		<result column="ChiNameAbbr" property="chiNameAbbr" jdbcType="VARCHAR" />
+		<result column="EngName" property="engName" jdbcType="VARCHAR" />
+		<result column="EngNameAbbr" property="engNameAbbr" jdbcType="VARCHAR" />
+		<result column="SecuAbbr" property="secuAbbr" jdbcType="VARCHAR" />
+		<result column="ChiSpelling" property="chiSpelling" jdbcType="VARCHAR" />
+		<result column="SecuMarket" property="secuMarket" jdbcType="INTEGER" />
+		<result column="SecuCategory" property="secuCategory" jdbcType="INTEGER" />
+		<result column="ListedDate" property="listedDate" jdbcType="TIMESTAMP" />
+		<result column="ListedSector" property="listedSector" jdbcType="INTEGER" />
+		<result column="ListedState" property="listedState" jdbcType="INTEGER" />
+		<result column="XGRQ" property="xgrq" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="jsid" jdbcType="BIGINT" />
+		<result column="ISIN" property="isin" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, InnerCode, CompanyCode,
+		SecuCode, ChiName, ChiNameAbbr,
+		EngName, EngNameAbbr, SecuAbbr,
+		ChiSpelling,
+		SecuMarket,
+		SecuCategory,
+		ListedDate, ListedSector, ListedState
+	</sql>
+
+	<select id="selectSecurtyProduct" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from SecuMain
+		where SecuCode=#{secuCode} and SecuCategory=8
+	</select>
+
+	<select id="selectSecurtyProducts" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from SecuMain
+		where SecuCode in
+		<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+			#{item}
+		</foreach>
+		and SecuCategory=8
+	</select>
+
+</mapper>

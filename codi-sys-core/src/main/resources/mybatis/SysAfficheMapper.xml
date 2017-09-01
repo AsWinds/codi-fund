@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codi.bus.core.sys.dao.SysAfficheDao">
+  <resultMap id="BaseResultMap" type="com.codi.bus.core.sys.domain.SysAffiche">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="link" jdbcType="VARCHAR" property="link" />
+    <result column="is_up" jdbcType="BIT" property="isUp" />
+    <result column="publish_time" jdbcType="TIMESTAMP" property="publishTime" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="publisher" jdbcType="VARCHAR" property="publisher" />
+    <result column="location" jdbcType="VARCHAR" property="location" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.codi.bus.core.sys.domain.SysAffiche">
+    <result column="content" jdbcType="LONGVARCHAR" property="content" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, title, link, is_up, publish_time, end_time, publisher, location
+  </sql>
+  <sql id="Blob_Column_List">
+    content
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_affiche
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from sys_affiche
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.codi.bus.core.sys.domain.SysAffiche" useGeneratedKeys="true"
+    keyProperty="id" keyColumn="id">
+    insert into sys_affiche (id, title, link,
+      is_up, publish_time, end_time,
+      publisher, location, content
+      )
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR},
+      #{isUp,jdbcType=BIT}, #{publishTime,jdbcType=TIMESTAMP}, #{endTime,jdbcType=TIMESTAMP},
+      #{publisher,jdbcType=VARCHAR}, #{location,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.codi.bus.core.sys.domain.SysAffiche" useGeneratedKeys="true"
+    keyProperty="id" keyColumn="id">
+    insert into sys_affiche
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="title != null">
+        title,
+      </if>
+      <if test="link != null">
+        link,
+      </if>
+      <if test="isUp != null">
+        is_up,
+      </if>
+      <if test="publishTime != null">
+        publish_time,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+      <if test="publisher != null">
+        publisher,
+      </if>
+      <if test="location != null">
+        location,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null">
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="isUp != null">
+        #{isUp,jdbcType=BIT},
+      </if>
+      <if test="publishTime != null">
+        #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publisher != null">
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.codi.bus.core.sys.domain.SysAffiche">
+    update sys_affiche
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null">
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="isUp != null">
+        is_up = #{isUp,jdbcType=BIT},
+      </if>
+      <if test="publishTime != null">
+        publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publisher != null">
+        publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="location != null">
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null">
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.codi.bus.core.sys.domain.SysAffiche">
+    update sys_affiche
+    set title = #{title,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      is_up = #{isUp,jdbcType=BIT},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.codi.bus.core.sys.domain.SysAffiche">
+    update sys_affiche
+    set title = #{title,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      is_up = #{isUp,jdbcType=BIT},
+      publish_time = #{publishTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      location = #{location,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findAllNotUp" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_affiche
+    where is_up = false
+    order by id desc
+  </select>
+  
+  <select id="findAllUp" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_affiche
+    where is_up = true
+    order by id desc
+  </select>
+</mapper>

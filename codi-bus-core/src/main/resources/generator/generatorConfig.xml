@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+  <context id="Mysql" targetRuntime="MyBatis3">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver"
+        connectionURL="jdbc:mysql://121.40.187.122:3306/codi"
+        userId="root"
+        password="123"
+        >
+    </jdbcConnection>
+
+    <javaTypeResolver >
+      <property name="forceBigDecimals" value="false" />
+    </javaTypeResolver>
+
+    <javaModelGenerator targetPackage="com.codi.bus.core.domain" targetProject="src/main/java">
+      <!-- enableSubPackages:是否让schema作为包的后缀 -->
+      <property name="enableSubPackages" value="false" />
+      <!-- 从数据库返回的值被清理前后的空格  -->
+      <property name="trimStrings" value="true" />
+    </javaModelGenerator>
+
+    <sqlMapGenerator targetPackage="mybatis"  targetProject="src/main/resources">
+      <property name="enableSubPackages" value="false" />
+    </sqlMapGenerator>
+
+    <javaClientGenerator type="XMLMAPPER" targetPackage="com.codi.bus.core.dao"  targetProject="src/main/java">
+      <property name="enableSubPackages" value="false" />
+    </javaClientGenerator>
+
+    <!-- <table schema="test" tableName="sys_t_role" domainObjectName="Role" /> 
+    <table schema="test" tableName="user" domainObjectName="User" />-->
+    <table schema="codi" tableName="rule_lu_lookup" domainObjectName="Lookup" enableCountByExample="false" enableUpdateByExample="false"	enableDeleteByExample="false" enableSelectByExample="false"	selectByExampleQueryId="false">
+    	<property name="useActualColumnNames" value="false"/>
+    	<!-- 生成代码时，去掉列名的前缀 -->
+    	<columnRenamingRule searchString="^rule_lu_" replaceString=""/> 
+    </table>    
+    </context>
+</generatorConfiguration>

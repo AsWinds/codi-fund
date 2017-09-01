@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.bus.core.sys.dao.FundCourseDao" >
+  <resultMap id="BaseResultMap" type="com.codi.bus.core.sys.domain.FundCourse" >
+    <id column="fc_course_id" property="courseId" jdbcType="BIGINT" />
+    <result column="fc_course_title" property="courseTitle" jdbcType="VARCHAR" />
+    <result column="fc_course_type" property="courseType" jdbcType="INTEGER" />
+    <result column="fc_create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="fc_create_user_id" property="createUserId" jdbcType="VARCHAR" />
+    <result column="fc_last_updated_date" property="lastUpdatedDate" jdbcType="TIMESTAMP" />
+    <result column="fc_last_updated_user_id" property="lastUpdatedUserId" jdbcType="VARCHAR" />
+    <result column="fc_publish_date" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="fc_publisher" property="publisher" jdbcType="VARCHAR" />
+    <result column="fc_is_deleted" property="isDeleted" jdbcType="BIT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.codi.bus.core.sys.domain.FundCourse" extends="BaseResultMap" >
+    <result column="fc_course_content" property="courseContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fc_course_id, fc_course_title, fc_course_type, fc_create_date, fc_create_user_id,
+    fc_last_updated_date, fc_last_updated_user_id, fc_publish_date, fc_publisher, fc_is_deleted
+  </sql>
+  <sql id="Blob_Column_List" >
+    fc_course_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_fund_course
+    where fc_course_id = #{courseId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_fund_course
+    where fc_course_id = #{courseId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.codi.bus.core.sys.domain.FundCourse" useGeneratedKeys="true"
+    keyProperty="courseId" keyColumn="courseId">
+    insert into sys_fund_course (fc_course_id, fc_course_title, fc_course_type,
+      fc_create_date, fc_create_user_id, fc_last_updated_date,
+      fc_last_updated_user_id, fc_publish_date, fc_publisher,
+      fc_is_deleted, fc_course_content)
+    values (#{courseId,jdbcType=BIGINT}, #{courseTitle,jdbcType=VARCHAR}, #{courseType,jdbcType=INTEGER},
+      #{createDate,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=VARCHAR}, #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      #{lastUpdatedUserId,jdbcType=VARCHAR}, #{publishDate,jdbcType=TIMESTAMP}, #{publisher,jdbcType=VARCHAR},
+      #{isDeleted,jdbcType=BIT}, #{courseContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.codi.bus.core.sys.domain.FundCourse" useGeneratedKeys="true"
+          keyProperty="courseId" keyColumn="courseId">
+    insert into sys_fund_course
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        fc_course_id,
+      </if>
+      <if test="courseTitle != null" >
+        fc_course_title,
+      </if>
+      <if test="courseType != null" >
+        fc_course_type,
+      </if>
+      <if test="createDate != null" >
+        fc_create_date,
+      </if>
+      <if test="createUserId != null" >
+        fc_create_user_id,
+      </if>
+      <if test="lastUpdatedDate != null" >
+        fc_last_updated_date,
+      </if>
+      <if test="lastUpdatedUserId != null" >
+        fc_last_updated_user_id,
+      </if>
+      <if test="publishDate != null" >
+        fc_publish_date,
+      </if>
+      <if test="publisher != null" >
+        fc_publisher,
+      </if>
+      <if test="isDeleted != null" >
+        fc_is_deleted,
+      </if>
+      <if test="courseContent != null" >
+        fc_course_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="courseId != null" >
+        #{courseId,jdbcType=BIGINT},
+      </if>
+      <if test="courseTitle != null" >
+        #{courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null" >
+        #{courseType,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdatedDate != null" >
+        #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedUserId != null" >
+        #{lastUpdatedUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publisher != null" >
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="courseContent != null" >
+        #{courseContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.codi.bus.core.sys.domain.FundCourse" >
+    update sys_fund_course
+    <set >
+      <if test="courseTitle != null" >
+        fc_course_title = #{courseTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="courseType != null" >
+        fc_course_type = #{courseType,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        fc_create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUserId != null" >
+        fc_create_user_id = #{createUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdatedDate != null" >
+         fc_last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedUserId != null" >
+        fc_last_updated_user_id = #{lastUpdatedUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        fc_publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="publisher != null" >
+        fc_publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="isDeleted != null" >
+        fc_is_deleted = #{isDeleted,jdbcType=BIT},
+      </if>
+      <if test="courseContent != null" >
+        fc_course_content = #{courseContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where fc_course_id = #{courseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.codi.bus.core.sys.domain.FundCourse" >
+    update sys_fund_course
+    set fc_course_title = #{courseTitle,jdbcType=VARCHAR},
+      fc_course_type = #{courseType,jdbcType=INTEGER},
+      fc_create_date = #{createDate,jdbcType=TIMESTAMP},
+      fc_create_user_id = #{createUserId,jdbcType=VARCHAR},
+      fc_last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      fc_last_updated_user_id = #{lastUpdatedUserId,jdbcType=VARCHAR},
+      fc_publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      fc_publisher = #{publisher,jdbcType=VARCHAR},
+      fc_is_deleted = #{isDeleted,jdbcType=BIT},
+      fc_course_content = #{courseContent,jdbcType=LONGVARCHAR}
+    where fc_course_id = #{courseId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.codi.bus.core.sys.domain.FundCourse" >
+    update sys_fund_course
+    set fc_course_title = #{courseTitle,jdbcType=VARCHAR},
+      fc_course_type = #{courseType,jdbcType=INTEGER},
+      fc_create_date = #{createDate,jdbcType=TIMESTAMP},
+      fc_create_user_id = #{createUserId,jdbcType=VARCHAR},
+      fc_last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+      fc_last_updated_user_id = #{lastUpdatedUserId,jdbcType=VARCHAR},
+      fc_publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      fc_publisher = #{publisher,jdbcType=VARCHAR},
+      fc_is_deleted = #{isDeleted,jdbcType=BIT}
+    where fc_course_id = #{courseId,jdbcType=BIGINT}
+  </update>
+    <update id="fakeDelete" parameterType="com.codi.bus.core.sys.domain.FundCourse" >
+        update sys_fund_course
+        set fc_last_updated_date = #{lastUpdatedDate,jdbcType=TIMESTAMP},
+        fc_last_updated_user_id = #{lastUpdatedUserId,jdbcType=VARCHAR},
+        fc_is_deleted = #{isDeleted,jdbcType=BIT}
+        where fc_course_id = #{courseId,jdbcType=BIGINT}
+    </update>
+    <select id="selectByTitle" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from sys_fund_course
+        where fc_is_deleted = 0 and fc_course_title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+    </select>
+    <select id="queryByPage" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map" >
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from sys_fund_course
+        where fc_is_deleted = 0
+        <if test="title != null " >
+            and fc_course_title LIKE concat('%',#{title,jdbcType=VARCHAR},'%')
+        </if>
+    </select>
+    <select id="listFundCourses" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List" />
+        ,
+        <include refid="Blob_Column_List" />
+        from sys_fund_course
+        where fc_is_deleted = 0 
+        order by fc_publish_date desc
+    </select>
+</mapper>

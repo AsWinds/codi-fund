@@ -1,0 +1,1 @@
+alter table fi_fund_info add column fi_risk_level int;

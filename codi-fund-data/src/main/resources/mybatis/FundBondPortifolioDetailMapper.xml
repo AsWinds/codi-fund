@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundBondPortifolioDetail">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundBondPortifolioDetail">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="ReportDate" property="reportDate" jdbcType="TIMESTAMP" />
+		<result column="SerialNumber" property="serialNumber" jdbcType="INTEGER" />
+		<result column="BondCode" property="bondCode" jdbcType="INTEGER" />
+		<result column="HoldVolume" property="holdVolume" jdbcType="DECIMAL" />
+		<result column="MarketValue" property="marketValue" jdbcType="DECIMAL" />
+		<result column="RatioInNV" property="ratioInNV" jdbcType="DECIMAL" />
+		<result column="IfInConvertibleTerm" property="ifInConvertibleTerm" jdbcType="TINYINT" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+	<sql id="base-column-list">
+		ID, InnerCode, ReportDate,
+		SerialNumber, BondCode, HoldVolume,
+		MarketValue, RatioInNV, IfInConvertibleTerm,
+		XGRQ, JSID, InfoPublDate
+	</sql>
+	<select id="selectLatest" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT
+		A.ReportDate,
+		A.SerialNumber,
+		A.HoldVolume,
+		A.MarketValue,
+		A.RatioInNV,
+		A.BondCode AS 'InnerCode',
+		C.ChiName AS 'ChiName',
+		C.ChiNameAbbr AS 'FundName',
+		C.SecuAbbr AS 'FundNameAbbr'
+		FROM
+		MF_BondPortifolioDetail A,
+		(SELECT
+		MAX(TEMP.ReportDate) AS 'ReportDate'
+		FROM
+		MF_BondPortifolioDetail TEMP
+		WHERE
+		TEMP.InnerCode = #{innerCode}) B,
+		SecuMain C
+		WHERE
+		A.InnerCode = #{innerCode}
+		AND
+		A.ReportDate = B.ReportDate
+		AND C.InnerCode= A.BondCode
+		ORDER BY A.SerialNumber ASC
+	</select>
+</mapper>

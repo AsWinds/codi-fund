@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundNetValue">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundNetValue">
+		<result column="ID" property="id" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="EndDate" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="NV" property="nv" jdbcType="DECIMAL" />
+		<result column="UnitNV" property="unitNV" jdbcType="DECIMAL" />
+		<result column="AccumulatedUnitNV" property="accumulatedUnitNV" jdbcType="DECIMAL" />
+		<result column="DailyProfit" property="dailyProfit" jdbcType="DECIMAL" />
+		<result column="LatestWeeklyYield" property="latestWeeklyYield" jdbcType="DECIMAL" />
+		<result column="NVDailyGrowthRate" property="nvDailyGrowthRate" jdbcType="DECIMAL" />
+		<result column="NVWeeklyGrowthRate" property="nvWeeklyGrowthRate" jdbcType="DECIMAL" />
+		<result column="DiscountRatio" property="discountRatio" jdbcType="DECIMAL" />
+		<result column="XGRQ" property="xgrq" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="jsid" jdbcType="BIGINT" />
+		<result column="InvolvedDays" property="involvedDays" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		InfoSource, EndDate, NV,
+		UnitNV, AccumulatedUnitNV, DailyProfit,
+		LatestWeeklyYield, NVDailyGrowthRate, NVWeeklyGrowthRate,
+		DiscountRatio, XGRQ, JSID,
+		InvolvedDays
+	</sql>
+
+	<select id="selectNetValue" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		a.EndDate,
+		a.AccumulatedUnitNV,
+		a.DailyProfit,
+		a.LatestWeeklyYield,
+		a.NV,
+		a.UnitNV,
+		a.NVDailyGrowthRate,
+		a.NVWeeklyGrowthRate
+
+		from MF_NetValue a
+		where
+		a.InnerCode=#{innerCode}
+		order by a.EndDate
+		<choose>
+			<when test="sort == 0">
+				asc
+			</when>
+			<otherwise>
+				desc
+			</otherwise>
+		</choose>
+
+	</select>
+
+	<select id="selectLatest" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		<include refid="base-column-list" />
+		FROM
+		MF_NetValue A,
+		(SELECT
+		MAX(B.EndDate) AS 'CUSTOM_MAX_END_DATE'
+		FROM
+		MF_NetValue B
+		WHERE
+		B.InnerCode = #{innerCode}) TEMP
+		WHERE
+		A.InnerCode = #{innerCode}
+		AND A.EndDate = TEMP.CUSTOM_MAX_END_DATE;
+	</select>
+
+	<select id="selectLatestNetValue" resultMap="BaseResultMap" parameterType="com.codi.fundData.domain.FundNetValue">
+		SELECT
+		<include refid="base-column-list" />
+		FROM
+		MF_NetValue b
+		WHERE
+		b.InnerCode =#{innerCode}
+		AND b.EndDate = (SELECT
+		MAX(a.EndDate)
+		FROM
+		MF_NetValue a
+		WHERE
+		a.InnerCode
+		= #{innerCode}
+		AND a.EndDate <![CDATA[ <= ]]>
+		#{endDate})
+	</select>
+
+	<select id="selectStatic" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+
+		A.EndDate,
+		A.LatestWeeklyYield,
+		A.NVDailyGrowthRate
+
+		FROM MF_NetValue A WHERE
+		A.InnerCode=#{innerCode}
+		<if test="beginDate != null">
+			AND A.EndDate <![CDATA[ >= ]]>
+			#{beginDate}
+		</if>
+		<if test="endDate != null">
+			AND A.EndDate <![CDATA[ <= ]]>
+			#{endDate}
+		</if>
+		ORDER BY A.EndDate ASC
+	</select>
+
+	<select id="selectBySort" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+
+		A.EndDate,
+		A.UnitNV,
+		A.NVDailyGrowthRate,
+
+		A.LatestWeeklyYield,
+		A.DailyProfit,
+
+		B.SecuCode AS 'FundCode',
+		B.ChiName,
+		B.ChiNameAbbr,
+		B.SecuAbbr,
+		B.InnerCode
+
+		FROM SecuMain B LEFT JOIN MF_NetValue A
+		ON A.InnerCode= B.InnerCode AND
+		DATE_FORMAT(A.EndDate,"%Y-%m-%d")=DATE_FORMAT(#{tradingDay},"%Y-%m-%d")
+		WHERE
+		B.SecuCategory=8 AND
+		B.InnerCode IN (
+
+		<foreach collection="innerCodes" separator="," index="index" item="innerCode">
+			#{innerCode}
+		</foreach>
+		)
+
+		ORDER BY
+		ISNULL(A.EndDate),
+		<choose>
+			<when test="isCurrency == true">
+				ISNULL(A.LatestWeeklyYield),
+				A.LatestWeeklyYield
+			</when>
+			<otherwise>
+				ISNULL(A.NVDailyGrowthRate),
+				A.NVDailyGrowthRate
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort == 0">
+				ASC
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codi.fundData.domain.FundDetail">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundDetail">
+		<result column="ID" jdbcType="BIGINT" property="id" />
+		<result column="InnerCode" jdbcType="INTEGER" property="innerCode" />
+		<result column="EstablishmentDate" jdbcType="TIMESTAMP" property="establishmentDate" />
+		<result column="ListedDate" jdbcType="TIMESTAMP" property="listedDate" />
+		<result column="Duration" jdbcType="DECIMAL" property="duration" />
+		<result column="StartDate" jdbcType="TIMESTAMP" property="startDate" />
+		<result column="ExpireDate" jdbcType="TIMESTAMP" property="expireDate" />
+		<result column="Manager" jdbcType="VARCHAR" property="manager" />
+		<result column="InvestAdvisorCode" jdbcType="INTEGER" property="investAdvisorCode" />
+		<result column="TrusteeCode" jdbcType="INTEGER" property="trusteeCode" />
+		<result column="Warrantor" jdbcType="VARCHAR" property="warrantor" />
+		<result column="Type" jdbcType="INTEGER" property="type" />
+		<result column="InvestmentType" jdbcType="INTEGER" property="investmentType" />
+		<result column="InvestStyle" jdbcType="INTEGER" property="investStyle" />
+		<result column="FoundedSize" jdbcType="DECIMAL" property="foundedSize" />
+		<result column="InvestOrientation" jdbcType="VARCHAR" property="investOrientation" />
+		<result column="InvestTarget" jdbcType="VARCHAR" property="investTarget" />
+		<result column="PerformanceBenchMark" jdbcType="VARCHAR" property="performanceBenchMark" />
+		<result column="ProfitDistributionRule" jdbcType="VARCHAR" property="profitDistributionRule" />
+		<result column="InvestField" jdbcType="VARCHAR" property="investField" />
+		<result column="XGRQ" jdbcType="TIMESTAMP" property="xgrq" />
+		<result column="JSID" jdbcType="BIGINT" property="jsid" />
+		<result column="ApplyingCodeFront" jdbcType="VARCHAR" property="applyingCodeFront" />
+		<result column="ApplyingCodeBack" jdbcType="VARCHAR" property="applyingCodeBack" />
+		<result column="GuaranteedPeriod" jdbcType="DECIMAL" property="guaranteedPeriod" />
+		<result column="RiskReturncharacter" jdbcType="VARCHAR" property="riskReturnCharacter" />
+		<result column="LowestSumSubscribing" jdbcType="VARCHAR" property="lowestSumSubscribing" />
+		<result column="LowestSumRedemption" jdbcType="DECIMAL" property="lowestSumRedemption" />
+		<result column="LSFRDescription" jdbcType="VARCHAR" property="lsfrDescription" />
+		<result column="LowestSumForHolding" jdbcType="DECIMAL" property="lowestSumForHolding" />
+		<result column="LSFHDescription" jdbcType="VARCHAR" property="lsfhDescription" />
+		<result column="FundNature" jdbcType="INTEGER" property="fundNature" />
+		<result column="FundTypeCode" jdbcType="INTEGER" property="fundTypeCode" />
+		<result column="FundType" jdbcType="VARCHAR" property="fundType" />
+		<result column="CarryOverDate" jdbcType="INTEGER" property="carryOverDate" />
+		<result column="CarryOverDateRemark" jdbcType="VARCHAR" property="carryOverDateRemark" />
+		<result column="CarryOverType" jdbcType="INTEGER" property="carryOverType" />
+		<result column="RegInstCode" jdbcType="INTEGER" property="regInstCode" />
+		<result column="SecurityCode" jdbcType="VARCHAR" property="securityCode" />
+		<result column="DeliveryDays" jdbcType="INTEGER" property="deliveryDays" />
+		<result column="RiskReturnCode" jdbcType="INTEGER" property="riskReturnCode" />
+		<result column="FloatType" jdbcType="INTEGER" property="floatType" />
+		<result column="CustodyMarket" jdbcType="INTEGER" property="custodyMarket" />
+		<result column="OperationPeriod" jdbcType="DECIMAL" property="operationPeriod" />
+		<result column="OperationPDUnitCode" jdbcType="INTEGER" property="operationPDUnitCode" />
+		<result column="OperationPDUnitName" jdbcType="VARCHAR" property="operationPDUnitName" />
+		<result column="IfInitiatingFund" jdbcType="INTEGER" property="ifInitiatingFund" />
+		<result column="ClassificationFundType" jdbcType="INTEGER" property="classificationFundType" />
+		<result column="AgrBenchmkRateOfShareA" jdbcType="VARCHAR" property="agrBenchmkRateOfShareA" />
+		<result column="AgrBenchmkRateOfShareANotes" jdbcType="VARCHAR" property="agrBenchmkRateOfShareANotes" />
+		<result column="RegularShareConversionNotes" jdbcType="VARCHAR" property="regularShareConversionNotes" />
+		<result column="NonRegularShareConversionNotes" jdbcType="VARCHAR" property="nonRegularShareConversionNotes" />
+		<result column="ExApplyingMarket" jdbcType="INTEGER" property="exApplyingMarket" />
+		<result column="ExApplyingCode" jdbcType="VARCHAR" property="exApplyingCode" />
+		<result column="ExApplyingAbbr" jdbcType="VARCHAR" property="exApplyingAbbr" />
+		<result column="ShareProperties" jdbcType="INTEGER" property="shareProperties" />
+		<result column="StClearingDate" jdbcType="TIMESTAMP" property="stClearingDate" />
+		<result column="EnClearingDate" jdbcType="TIMESTAMP" property="enClearingDate" />
+		<result column="LowestSumSubLL" jdbcType="DECIMAL" property="lowestSumSubLL" />
+		<result column="LowestSumPurLL" jdbcType="DECIMAL" property="lowestSumPurLL" />
+		<result column="MainCode" jdbcType="VARCHAR" property="mainCode" />
+	</resultMap>
+	<resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.codi.fundData.domain.FundDetail">
+		<result column="BriefIntro" jdbcType="LONGVARCHAR" property="briefIntro" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		ID, InnerCode, EstablishmentDate,
+		ListedDate, Duration, StartDate,
+		ExpireDate, Manager,
+		InvestAdvisorCode,
+		TrusteeCode, Warrantor, Type,
+		InvestmentType, InvestStyle, FoundedSize,
+		InvestOrientation,
+		InvestTarget,
+		PerformanceBenchMark,
+		ProfitDistributionRule, InvestField, XGRQ,
+		JSID, ApplyingCodeFront,
+		ApplyingCodeBack,
+		GuaranteedPeriod, RiskReturncharacter,
+		LowestSumSubscribing, LowestSumRedemption,
+		LSFRDescription,
+		LowestSumForHolding,
+		LSFHDescription,
+		FundNature, FundTypeCode, FundType,
+		CarryOverDate, CarryOverDateRemark,
+		CarryOverType,
+		RegInstCode,
+		SecurityCode, DeliveryDays,
+		RiskReturnCode, FloatType, CustodyMarket,
+		OperationPeriod,
+		OperationPDUnitCode,
+		OperationPDUnitName,
+		IfInitiatingFund, ClassificationFundType,
+		AgrBenchmkRateOfShareA,
+		AgrBenchmkRateOfShareANotes,
+		RegularShareConversionNotes, NonRegularShareConversionNotes,
+		ExApplyingMarket,
+		ExApplyingCode, ExApplyingAbbr,
+		ShareProperties, StClearingDate, EnClearingDate,
+		LowestSumSubLL, LowestSumPurLL,
+		MainCode,
+		BriefIntro
+	</sql>
+	<select id="selectFundDetailByFundCode" resultMap="BaseResultMap" parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from
+		MF_FundArchives a,
+		(select b.InnerCode AS 'CUSTOM_INNER_CODE' from SecuMain b where b.SecuCode=#{secuCode} and
+		b.SecuCategory=8) TEMP
+		where
+		a.InnerCode=TEMP.CUSTOM_INNER_CODE
+	</select>
+
+	<select id="selectFundDetail" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base_Column_List" />
+		from
+		MF_FundArchives a
+		where
+		a.InnerCode=#{InnerCode}
+	</select>
+
+	<select id="selectFundByInvestAdvisorCode" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT
+		B.ChiName,
+		B.ChiNameAbbr,
+		B.SecuAbbr,
+		B.SecuCode AS 'FundCode',
+		TEMP.FundType,
+		TEMP.FundTypeCode
+		FROM
+		(
+		SELECT A.SecurityCode AS 'CUSTOM_SECURITY_CODE',
+		A.FundType,A.FundTypeCode FROM MF_FundArchives A
+		WHERE A.InvestAdvisorCode = #{investAdvisorCode} ORDER BY A.ID DESC
+		)
+		TEMP ,
+		SecuMain B
+		WHERE
+		B.SecuCategory = 8
+		AND
+		B.SecuCode =TEMP.CUSTOM_SECURITY_CODE
+	</select>
+
+
+</mapper>

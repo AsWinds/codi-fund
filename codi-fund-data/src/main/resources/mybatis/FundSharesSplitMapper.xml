@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundSharesSplit">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundSharesSplit">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="InfoType" property="infoType" jdbcType="INTEGER" />
+		<result column="SplitDay" property="splitDay" jdbcType="TIMESTAMP" />
+		<result column="SplitRatio" property="splitRatio" jdbcType="DECIMAL" />
+		<result column="OutcomeNoticeIssueDate" property="outcomeNoticeIssueDate" jdbcType="TIMESTAMP" />
+		<result column="ChangeRegDate" property="changeRegDate" jdbcType="TIMESTAMP" />
+		<result column="NV" property="NV" jdbcType="DECIMAL" />
+		<result column="SharesBefore" property="sharesBefore" jdbcType="DECIMAL" />
+		<result column="SharesAfter" property="sharesAfter" jdbcType="DECIMAL" />
+		<result column="UnitNVBefore" property="unitNVBefore" jdbcType="DECIMAL" />
+		<result column="UnitNVAfter" property="unitNVAfter" jdbcType="DECIMAL" />
+		<result column="AccumulatedUnitNVBefore" property="accumulatedUnitNVBefore" jdbcType="DECIMAL" />
+		<result column="AccumulatedUnitNVAfter" property="accumulatedUnitNVAfter" jdbcType="DECIMAL" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="InnerCodeAdd" property="innerCodeAdd" jdbcType="INTEGER" />
+		<result column="SplitRatioAdd" property="splitRatioAdd" jdbcType="DECIMAL" />
+		<result column="SharesAdd" property="sharesAdd" jdbcType="DECIMAL" />
+		<result column="SharesAddCombine" property="sharesAddCombine" jdbcType="DECIMAL" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+	</resultMap>
+
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		InfoSource, InfoType, SplitDay,
+		SplitRatio, OutcomeNoticeIssueDate,
+		ChangeRegDate,
+		NV, SharesBefore, SharesAfter,
+		UnitNVBefore, UnitNVAfter, AccumulatedUnitNVBefore,
+		AccumulatedUnitNVAfter, XGRQ, JSID,
+		InnerCodeAdd, SplitRatioAdd, SharesAdd,
+		SharesAddCombine, Remark
+	</sql>
+
+	<select id="selectFundSharesSplitList" resultMap="BaseResultMap" parameterType="java.util.Map">
+
+		select
+
+		SplitDay,
+		SplitRatio
+
+		from MF_SharesSplit
+		where InnerCode=#{innerCode} AND SplitRatio IS NOT NULL
+
+		order by SplitDay desc
+	</select>
+</mapper>

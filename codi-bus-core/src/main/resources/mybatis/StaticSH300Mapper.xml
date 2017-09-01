@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codi.bus.core.domain.StaticSH300">
+	<resultMap id="BaseResultMap" type="com.codi.bus.core.domain.StaticSH300">
+		<id column="ID" property="id" jdbcType="BIGINT" />
+		<result column="TRADING_DATE" property="tradingDate" jdbcType="DATE" />
+		<result column="OPEN_PRICE" property="openPrice" jdbcType="DECIMAL" />
+		<result column="CLOSE_PRICE" property="closePrice" jdbcType="DECIMAL" />
+		<result column="MAX_PRICE" property="maxPrice" jdbcType="DECIMAL" />
+		<result column="MIN_PRICE" property="minPrice" jdbcType="DECIMAL" />
+		<result column="TURNOVER_VOLUME" property="turnoverVolume" jdbcType="DECIMAL" />
+		<result column="DAILY_GROWTH_RATE" property="dailyGrowthRate" jdbcType="DECIMAL" />
+		<result column="CREATE_DATE" property="createDate" jdbcType="TIMESTAMP" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, TRADING_DATE, OPEN_PRICE, CLOSE_PRICE,
+		MAX_PRICE, MIN_PRICE, TURNOVER_VOLUME, DAILY_GROWTH_RATE,
+		CREATE_DATE
+	</sql>
+	<select id="select" parameterType="java.lang.Long" resultMap="BaseResultMap">
+		select
+		TRADING_DATE,DAILY_GROWTH_RATE,CLOSE_PRICE
+		from
+		STATIC_SH300
+		where
+		1=1
+		<if test="beginDate != null">
+			AND TRADING_DATE <![CDATA[ >= ]]>
+			#{beginDate}
+		</if>
+		<if test="endDate != null">
+			AND TRADING_DATE <![CDATA[ <= ]]>
+			#{endDate}
+		</if>
+		ORDER BY TRADING_DATE ASC
+	</select>
+
+	<delete id="deleteAll">
+		delete from STATIC_SH300
+	</delete>
+
+	<insert id="insert" parameterType="com.codi.bus.core.domain.StaticSH300">
+		insert into STATIC_SH300
+		(TRADING_DATE, OPEN_PRICE,
+		CLOSE_PRICE, MAX_PRICE,
+		MIN_PRICE,
+		TURNOVER_VOLUME,
+		DAILY_GROWTH_RATE, CREATE_DATE
+		)
+		values
+		( #{tradingDate,jdbcType=DATE},
+		#{openPrice,jdbcType=DECIMAL},
+		#{closePrice,jdbcType=DECIMAL},
+		#{maxPrice,jdbcType=DECIMAL},
+		#{minPrice,jdbcType=DECIMAL},
+		#{turnoverVolume,jdbcType=DECIMAL},
+		#{dailyGrowthRate,jdbcType=DECIMAL},
+		#{createDate,jdbcType=TIMESTAMP}
+		)
+	</insert>
+
+	<insert id="insertByBatch" parameterType="java.util.List">
+		insert into STATIC_SH300
+		(TRADING_DATE, OPEN_PRICE,
+		CLOSE_PRICE,
+		MAX_PRICE,
+		MIN_PRICE,
+		TURNOVER_VOLUME,
+		DAILY_GROWTH_RATE,
+		CREATE_DATE
+		)
+		values
+		<foreach collection="list" item="item" separator=",">
+			( #{item.tradingDate,jdbcType=DATE},
+			#{item.openPrice,jdbcType=DECIMAL},
+			#{item.closePrice,jdbcType=DECIMAL},
+			#{item.maxPrice,jdbcType=DECIMAL},
+			#{item.minPrice,jdbcType=DECIMAL},
+			#{item.turnoverVolume,jdbcType=DECIMAL},
+			#{item.dailyGrowthRate,jdbcType=DECIMAL},
+			#{item.createDate,jdbcType=TIMESTAMP}
+			)
+		</foreach>
+	</insert>
+
+	<select id="selectLatest" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		STATIC_SH300 A,
+		(SELECT
+		MAX(TRADING_DATE) AS 'TEMP_MAX_TRADING_DATE'
+		FROM
+		STATIC_SH300) TEMP
+		WHERE
+		A.TRADING_DATE =
+		TEMP.TEMP_MAX_TRADING_DATE
+	</select>
+
+
+	<select id="selectByTradingDate" resultMap="BaseResultMap" parameterType="java.util.Date">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM
+		STATIC_SH300 A
+		WHERE
+		DATE_FORMAT(A.TRADING_DATE, "%Y-%d-%m") =DATE_FORMAT(#{tradingDate}, "%Y-%d-%m")
+	</select>
+
+</mapper>

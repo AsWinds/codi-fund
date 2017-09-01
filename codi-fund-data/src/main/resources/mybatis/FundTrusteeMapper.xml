@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundTrustee">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundTrustee">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="TrusteeCode" property="trusteeCode" jdbcType="INTEGER" />
+		<result column="TrusteeName" property="trusteeName" jdbcType="VARCHAR" />
+		<result column="LegalRepr" property="legalRepr" jdbcType="VARCHAR" />
+		<result column="TrusteeFunctionary" property="trusteeFunctionary" jdbcType="VARCHAR" />
+		<result column="LinkMan" property="linkMan" jdbcType="VARCHAR" />
+		<result column="EstablishmentDate" property="establishmentDate" jdbcType="TIMESTAMP" />
+		<result column="OrganizationForm" property="organizationForm" jdbcType="VARCHAR" />
+		<result column="RegCapital" property="regCapital" jdbcType="DECIMAL" />
+		<result column="RegAddr" property="regAddr" jdbcType="VARCHAR" />
+		<result column="OfficeAddr" property="officeAddr" jdbcType="VARCHAR" />
+		<result column="ZipCode" property="zipCode" jdbcType="VARCHAR" />
+		<result column="WebSite" property="webSite" jdbcType="VARCHAR" />
+		<result column="Email" property="email" jdbcType="VARCHAR" />
+		<result column="ContactAddr" property="contactAddr" jdbcType="VARCHAR" />
+		<result column="Tel" property="tel" jdbcType="VARCHAR" />
+		<result column="Fax" property="fax" jdbcType="VARCHAR" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.codi.fundData.domain.FundTrustee" extends="BaseResultMap">
+		<result column="Background" property="background" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Blob_Column_List">
+		Background
+	</sql>
+
+	<sql id="base-column-list">
+		ID, TrusteeCode, TrusteeName,
+		LegalRepr, TrusteeFunctionary, LinkMan,
+		EstablishmentDate, OrganizationForm,
+		RegCapital, RegAddr, OfficeAddr,
+		ZipCode, WebSite, Email,
+		ContactAddr, Tel, Fax,
+		XGRQ, JSID, Background
+	</sql>
+
+	<select id="selectFundTrustee" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer">
+		select
+		<include refid="base-column-list" />
+		from MF_TrusteeOutline
+		where TrusteeCode=#{trusteeCode}
+	</select>
+</mapper>

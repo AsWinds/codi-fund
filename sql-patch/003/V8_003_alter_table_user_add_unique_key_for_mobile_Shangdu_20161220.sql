@@ -1,0 +1,1 @@
+ALTER TABLE `ur_user` ADD UNIQUE INDEX `ur_user_mobile` (`ur_user_mobile`);

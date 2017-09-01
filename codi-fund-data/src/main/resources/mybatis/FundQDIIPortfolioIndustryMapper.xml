@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundQDIIPortfolioIndustry">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundQDIIPortfolioIndustry">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="EndDate" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="Standard" property="standard" jdbcType="INTEGER" />
+		<result column="SerialNumber" property="serialNumber" jdbcType="INTEGER" />
+		<result column="IndustryType" property="industryType" jdbcType="INTEGER" />
+		<result column="IndustryName" property="industryName" jdbcType="VARCHAR" />
+		<result column="MarketValue" property="marketValue" jdbcType="DECIMAL" />
+		<result column="RatioInNV" property="ratioInNV" jdbcType="DECIMAL" />
+		<result column="Remark" property="remark" jdbcType="VARCHAR" />
+		<result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		InfoSource, EndDate, Standard,
+		SerialNumber, IndustryType, IndustryName,
+		MarketValue, RatioInNV, Remark,
+		UpdateTime, JSID
+	</sql>
+
+	<select id="selectLatest" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		A.EndDate,
+		A.SerialNumber,
+		A.IndustryType,
+		A.IndustryName,
+		A.MarketValue,
+		A.RatioInNV
+		FROM
+		MF_QDIIPortfolioIndustry A,
+		(SELECT
+		MAX(TEMP.EndDate) AS 'EndDate'
+		FROM
+		MF_QDIIPortfolioIndustry TEMP
+		WHERE
+		TEMP.InnerCode = 16426) B
+		WHERE
+		A.InnerCode = 16426
+		AND A.IndustryType <![CDATA[<>]]> 1
+		AND A.EndDate = B.EndDate
+		ORDER BY A.MarketValue DESC;
+	</select>
+
+</mapper>

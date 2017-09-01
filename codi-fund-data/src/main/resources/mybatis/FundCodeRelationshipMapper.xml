@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundCodeRelationship">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundCodeRelationship">
+		<result column="ID" property="id" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innercode" jdbcType="INTEGER" />
+		<result column="CodeDefine" property="codedefine" jdbcType="INTEGER" />
+		<result column="RelatedInnerCode" property="relatedinnercode" jdbcType="INTEGER" />
+		<result column="RelatedCode" property="relatedcode" jdbcType="VARCHAR" />
+		<result column="StartDate" property="startdate" jdbcType="TIMESTAMP" />
+		<result column="EndDate" property="enddate" jdbcType="TIMESTAMP" />
+		<result column="IfEffected" property="ifeffected" jdbcType="INTEGER" />
+		<result column="Remarks" property="remarks" jdbcType="VARCHAR" />
+		<result column="UpdateTime" property="updatetime" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="jsid" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="base-column-list">
+		ID, InnerCode, CodeDefine,
+		RelatedInnerCode, RelatedCode, StartDate,
+		EndDate, IfEffected, Remarks,
+		UpdateTime
+	</sql>
+
+	<select id="queryCodeRelationships" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		ID, InnerCode, CodeDefine,
+		RelatedInnerCode, RelatedCode, StartDate,
+		EndDate, IfEffected
+		FROM MF_CodeRelationshipNew
+		WHERE
+		RelatedInnerCode=#{relatedInnerCode}
+		<if test="codeDefine != null">
+			AND CodeDefine=#{codeDefine}
+		</if>
+		 AND IfEffected=#{ifEffected}
+	</select>
+</mapper>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundQDIIPortfolioDetail">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundQDIIPortfolioDetail">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="ReportType" property="reportType" jdbcType="INTEGER" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="EndDate" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="InvestType" property="investType" jdbcType="INTEGER" />
+		<result column="SerialNumber" property="serialNumber" jdbcType="INTEGER" />
+		<result column="SecuCode" property="secuCode" jdbcType="VARCHAR" />
+		<result column="SecuName" property="secuName" jdbcType="VARCHAR" />
+		<result column="EngName" property="engName" jdbcType="VARCHAR" />
+		<result column="SharesHolding" property="sharesHolding" jdbcType="DECIMAL" />
+		<result column="MarketValue" property="marketValue" jdbcType="DECIMAL" />
+		<result column="RatioInNV" property="ratioInNV" jdbcType="DECIMAL" />
+		<result column="SecuMarket" property="secuMarket" jdbcType="INTEGER" />
+		<result column="SecuMarketDesc" property="secuMarketDesc" jdbcType="VARCHAR" />
+		<result column="HomeCountry" property="homeCountry" jdbcType="INTEGER" />
+		<result column="HomeCountryDesc" property="homeCountryDesc" jdbcType="VARCHAR" />
+		<result column="FundType" property="fundType" jdbcType="INTEGER" />
+		<result column="FundTypeDesc" property="fundTypeDesc" jdbcType="VARCHAR" />
+		<result column="OperateType" property="operateType" jdbcType="INTEGER" />
+		<result column="OperateTypeDesc" property="operateTypeDesc" jdbcType="VARCHAR" />
+		<result column="InvestAdvisorName" property="investAdvisorName" jdbcType="VARCHAR" />
+		<result column="FundAssetType" property="fundAssetType" jdbcType="INTEGER" />
+		<result column="FundAssetTypeDesc" property="fundAssetTypeDesc" jdbcType="VARCHAR" />
+		<result column="InvestStyle" property="investStyle" jdbcType="INTEGER" />
+		<result column="InvestStyleDesc" property="investStyleDesc" jdbcType="VARCHAR" />
+		<result column="CodeType" property="codeType" jdbcType="INTEGER" />
+		<result column="SecuTradeCode" property="secuTradeCode" jdbcType="VARCHAR" />
+		<result column="SecuInnerCode" property="secuInnerCode" jdbcType="INTEGER" />
+		<result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="InvestCategory" property="investCategory" jdbcType="INTEGER" />
+	</resultMap>
+
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		ReportType, InfoSource, EndDate,
+		InvestType, SerialNumber, SecuCode,
+		SecuName,
+		EngName, SharesHolding,
+		MarketValue, RatioInNV, SecuMarket,
+		SecuMarketDesc, HomeCountry, HomeCountryDesc,
+		FundType,
+		FundTypeDesc, OperateType,
+		OperateTypeDesc, InvestAdvisorName, FundAssetType,
+		FundAssetTypeDesc, InvestStyle,
+		InvestStyleDesc,
+		CodeType, SecuTradeCode, SecuInnerCode,
+		UpdateTime, JSID, InvestCategory
+	</sql>
+
+	<select id="selectLatest" resultType="java.util.Map" parameterType="java.lang.Integer">
+		SELECT
+		A.InfoPublDate,
+		A.SerialNumber,
+		A.SharesHolding AS 'HoldVolume',
+		A.MarketValue,
+		A.RatioInNV,
+		A.SecuCode AS 'FundCode',
+		A.SecuName AS 'FundName'
+		FROM
+		MF_QDIIPortfolioDetail A,
+		(SELECT
+		MAX(TEMP.InfoPublDate) AS 'InfoPublDate'
+		FROM
+		MF_QDIIPortfolioDetail TEMP
+		WHERE
+		TEMP.InnerCode =
+		#{innerCode}) B
+		WHERE
+		A.InnerCode = #{innerCode}
+		AND A.InfoPublDate = B.InfoPublDate
+		ORDER BY
+		A.SerialNumber ASC
+		LIMIT 0,10
+	</select>
+
+</mapper>

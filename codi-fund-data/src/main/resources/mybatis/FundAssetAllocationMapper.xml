@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundAssetAllocation">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundAssetAllocation">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="ReportDate" property="reportDate" jdbcType="TIMESTAMP" />
+		<result column="AssetType" property="assetType" jdbcType="VARCHAR" />
+		<result column="MarketValue" property="marketValue" jdbcType="DECIMAL" />
+		<result column="RatioInTotalAsset" property="ratioInTotalAsset" jdbcType="DECIMAL" />
+		<result column="RatioInNV" property="ratioInNV" jdbcType="DECIMAL" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="AssetTypeCode" property="assetTypeCode" jdbcType="INTEGER" />
+	</resultMap>
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		ReportDate, AssetType, MarketValue,
+		RatioInTotalAsset, RatioInNV, XGRQ,
+		AssetTypeCode
+	</sql>
+
+	<select id="selectLatestAssetAllocation" resultMap="BaseResultMap" parameterType="com.codi.fundData.domain.FundAssetAllocation">
+		SELECT
+		a.ID, a.InnerCode, a.InfoPublDate,
+		a.ReportDate, a.AssetType, a.MarketValue,
+		a.RatioInTotalAsset, a.RatioInNV,
+		a.AssetTypeCode
+		FROM
+		MF_AssetAllocation a,
+		(select
+		MAX(ID) AS 'ID'
+		FROM MF_AssetAllocation TEMP
+		WHERE
+		TEMP.InnerCode=#{innerCode}
+		<if test="assetTypeCode != null">
+			AND TEMP.AssetTypeCode=#{assetTypeCode}
+		</if>
+		) b
+		WHERE
+		a.ID =b.ID
+	</select>
+
+	<select id="selectAssetAllocationList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		SELECT
+		a.ID, a.InnerCode, a.InfoPublDate,
+		a.ReportDate, a.AssetType, a.MarketValue,
+		a.RatioInTotalAsset, a.RatioInNV,
+		a.AssetTypeCode
+		FROM
+		MF_AssetAllocation a,
+		(select
+		MAX(TEMP.ReportDate) AS 'ReportDate'
+		FROM MF_AssetAllocation TEMP
+		WHERE
+		TEMP.InnerCode=#{innerCode}
+		) b
+		WHERE
+		a.InnerCode=#{innerCode}
+		<if test="assetTypeCodes != null">
+			AND a.AssetTypeCode IN
+			<foreach collection="assetTypeCodes" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+		</if>
+		AND a.ReportDate =b.ReportDate
+	</select>
+
+</mapper>

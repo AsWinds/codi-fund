@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundMMYieldPerformance">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundMMYieldPerformance">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="InnerCode" jdbcType="INTEGER" />
+		<result column="TradingDay" property="TradingDay" jdbcType="TIMESTAMP" />
+		<result column="UnitNV" property="UnitNV" jdbcType="DECIMAL" />
+		<result column="AccumulatedUnitNV" property="AccumulatedUnitNV" jdbcType="DECIMAL" />
+		<result column="DailyProfit" property="DailyProfit" jdbcType="DECIMAL" />
+		<result column="LatestWeeklyYield" property="LatestWeeklyYield" jdbcType="DECIMAL" />
+		<result column="InvolvedDays" property="InvolvedDays" jdbcType="INTEGER" />
+		<result column="AnnualizedRRInSingleWeek" property="AnnualizedRRInSingleWeek" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInTwoWeek" property="AnnualizedRRInTwoWeek" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInThreeWeek" property="AnnualizedRRInThreeWeek" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInFourWeek" property="AnnualizedRRInFourWeek" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInFiveWeek" property="AnnualizedRRInFiveWeek" jdbcType="DECIMAL" />
+		<result column="RRInThisWeek" property="RRInThisWeek" jdbcType="DECIMAL" />
+		<result column="RRInSingleWeek" property="RRInSingleWeek" jdbcType="DECIMAL" />
+		<result column="RRInThisMonth" property="RRInThisMonth" jdbcType="DECIMAL" />
+		<result column="RRInSingleMonth" property="RRInSingleMonth" jdbcType="DECIMAL" />
+		<result column="RRInThreeMonth" property="RRInThreeMonth" jdbcType="DECIMAL" />
+		<result column="RRInSixMonth" property="RRInSixMonth" jdbcType="DECIMAL" />
+		<result column="RRSinceThisYear" property="RRSinceThisYear" jdbcType="DECIMAL" />
+		<result column="RRInSingleYear" property="RRInSingleYear" jdbcType="DECIMAL" />
+		<result column="RRInTwoYear" property="RRInTwoYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInTwoYear" property="AnnualizedRRInTwoYear" jdbcType="DECIMAL" />
+		<result column="RRInThreeYear" property="RRInThreeYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInThreeYear" property="AnnualizedRRInThreeYear" jdbcType="DECIMAL" />
+		<result column="RRInFiveYear" property="RRInFiveYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInFiveYear" property="AnnualizedRRInFiveYear" jdbcType="DECIMAL" />
+		<result column="RRInTenYear" property="RRInTenYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInTenYear" property="AnnualizedRRInTenYear" jdbcType="DECIMAL" />
+		<result column="RRSinceStart" property="RRSinceStart" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRSinceStart" property="AnnualizedRRSinceStart" jdbcType="DECIMAL" />
+		<result column="UpdateTime" property="UpdateTime" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="DailyProfit1" property="DailyProfit1" jdbcType="DECIMAL" />
+	</resultMap>
+	<sql id="Base-Column-List">
+		ID, InnerCode, TradingDay,
+		UnitNV, AccumulatedUnitNV, DailyProfit,
+		LatestWeeklyYield, InvolvedDays,
+		AnnualizedRRInSingleWeek,
+		AnnualizedRRInTwoWeek, AnnualizedRRInThreeWeek,
+		AnnualizedRRInFourWeek,
+		AnnualizedRRInFiveWeek,
+		RRInThisWeek, RRInSingleWeek, RRInThisMonth,
+		RRInSingleMonth, RRInThreeMonth, RRInSixMonth,
+		RRSinceThisYear, RRInSingleYear, RRInTwoYear,
+		AnnualizedRRInTwoYear, RRInThreeYear, AnnualizedRRInThreeYear,
+		RRInFiveYear, AnnualizedRRInFiveYear, RRInTenYear,
+		AnnualizedRRInTenYear, RRSinceStart, AnnualizedRRSinceStart,
+		UpdateTime, JSID, DailyProfit1
+	</sql>
+
+	<select id="selectMMYiedlPerformaceLatest" resultMap="BaseResultMap" parameterType="com.codi.fundData.domain.FundMMYieldPerformance">
+		select
+		<include refid="Base-Column-List" />
+		FROM
+		MF_MMYieldPerformance A,
+		(SELECT
+		MAX(b.TradingDay) AS 'MaxTradingDay'
+		FROM
+		MF_MMYieldPerformance b
+		WHERE
+		b.InnerCode=#{InnerCode}
+		<if test="TradingDay != null">
+			and a.TradingDay <![CDATA[ <= ]]>
+			#{TradingDay}
+		</if>
+		AND b.DailyProfit IS NOT NULL
+		AND b.LatestWeeklyYield IS NOT NULL) TEMP
+		where A.InnerCode=#{InnerCode} AND
+		A.TradingDay=TEMP.MaxTradingDay
+
+	</select>
+
+
+	<select id="selectMMYiedlPerformace" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="Base-Column-List" />
+		from MF_MMYieldPerformance a
+		where a.InnerCode=#{InnerCode}
+	</select>
+</mapper>

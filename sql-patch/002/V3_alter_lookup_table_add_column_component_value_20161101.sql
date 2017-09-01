@@ -1,0 +1,1 @@
+alter table rule_lu_lookup add rule_lu_component_value varchar(100) null;

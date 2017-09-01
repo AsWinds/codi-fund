@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundNetValuePerformance">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundNetValuePerformance">
+		<result column="ID" property="id" jdbcType="BIGINT" />
+		<result column="InnerCode" property="InnerCode" jdbcType="INTEGER" />
+		<result column="TradingDay" property="TradingDay" jdbcType="TIMESTAMP" />
+		<result column="UnitNV" property="UnitNV" jdbcType="DECIMAL" />
+		<result column="RRInSelectedWeek" property="RRInSelectedWeek" jdbcType="DECIMAL" />
+		<result column="RRInSingleWeek" property="RRInSingleWeek" jdbcType="DECIMAL" />
+		<result column="RRInSelectedMonth" property="RRInSelectedMonth" jdbcType="DECIMAL" />
+		<result column="RRInSingleMonth" property="RRInSingleMonth" jdbcType="DECIMAL" />
+		<result column="RRInThreeMonth" property="RRInThreeMonth" jdbcType="DECIMAL" />
+		<result column="RRInSixMonth" property="RRInSixMonth" jdbcType="DECIMAL" />
+		<result column="RRSinceThisYear" property="RRSinceThisYear" jdbcType="DECIMAL" />
+		<result column="RRInSingleYear" property="RRInSingleYear" jdbcType="DECIMAL" />
+		<result column="RRInTwoYear" property="RRInTwoYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInTwoYear" property="AnnualizedRRInTwoYear" jdbcType="DECIMAL" />
+		<result column="RRInThreeYear" property="RRInThreeYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInThreeYear" property="AnnualizedRRInThreeYear" jdbcType="DECIMAL" />
+		<result column="RRInFiveYear" property="RRInFiveYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInFiveYear" property="AnnualizedRRInFiveYear" jdbcType="DECIMAL" />
+		<result column="RRInTenYear" property="RRInTenYear" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRInTenYear" property="AnnualizedRRInTenYear" jdbcType="DECIMAL" />
+		<result column="RRSinceStart" property="RRSinceStart" jdbcType="DECIMAL" />
+		<result column="AnnualizedRRSinceStart" property="AnnualizedRRSinceStart" jdbcType="DECIMAL" />
+		<result column="UpdateTime" property="UpdateTime" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="NVDailyGrowthRate" property="NVDailyGrowthRate" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="Base-Column-List">
+		ID, InnerCode, TradingDay,
+		UnitNV, RRInSelectedWeek, RRInSingleWeek,
+		RRInSelectedMonth, RRInSingleMonth,
+		RRInThreeMonth,
+		RRInSixMonth, RRSinceThisYear, RRInSingleYear,
+		RRInTwoYear, AnnualizedRRInTwoYear, RRInThreeYear,
+		AnnualizedRRInThreeYear, RRInFiveYear,
+		AnnualizedRRInFiveYear, RRInTenYear, AnnualizedRRInTenYear,
+		RRSinceStart,
+		AnnualizedRRSinceStart, UpdateTime,
+		JSID, NVDailyGrowthRate
+	</sql>
+
+	<sql id="simple-column-list">
+		ID, InnerCode, TradingDay,
+		UnitNV, RRInSelectedWeek, RRInSingleWeek,
+		RRInSelectedMonth, RRInSingleMonth,
+		RRInThreeMonth,
+		RRInSixMonth, RRSinceThisYear, RRInSingleYear,
+		RRInTwoYear, AnnualizedRRInTwoYear, RRInThreeYear,
+		AnnualizedRRInThreeYear, RRInFiveYear,
+		AnnualizedRRInFiveYear, RRInTenYear, AnnualizedRRInTenYear,
+		RRSinceStart,
+		AnnualizedRRSinceStart, UpdateTime, NVDailyGrowthRate
+	</sql>
+
+
+	<!-- 非货币型基金都走这个查询 -->
+	<select id="select" resultMap="BaseResultMap" parameterType="com.codi.fundData.domain.FundNetValuePerformance">
+		select
+		<include refid="Base-Column-List" />
+		from MF_NetValuePerformance a
+		where a.InnerCode=#{InnerCode}
+	</select>
+
+	<select id="selectLatest" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		<include refid="simple-column-list" />
+		from MF_NetValuePerformance a
+		where a.InnerCode=#{InnerCode}
+	</select>
+
+	<!-- 复杂排序查询 -->
+	<select id="selectBySort" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+		
+		A.TradingDay,
+		A.UnitNV,
+
+		A.NVDailyGrowthRate,
+		A.RRInSingleWeek,
+		A.RRInSingleMonth,
+		A.RRInThreeMonth,
+		A.RRInSixMonth,
+		A.RRInSingleYear,
+		A.RRInTwoYear,
+		A.RRInThreeYear,
+		A.RRSinceStart,
+		A.RRSinceThisYear,
+
+		B.SecuCode AS 'FundCode',
+		B.ChiName,
+		B.ChiNameAbbr,
+		B.SecuAbbr,
+		B.InnerCode
+
+		FROM SecuMain B LEFT JOIN MF_NetValuePerformance A
+		ON
+		A.InnerCode=B.InnerCode
+		AND DATE_FORMAT(A.TradingDay,"%Y-%m-%d")=DATE_FORMAT(#{tradingDay},"%Y-%m-%d")
+		
+		WHERE
+		B.SecuCategory=8
+		AND
+		B.InnerCode IN (
+
+		<foreach collection="innerCodes" separator="," index="index" item="innerCode">
+			#{innerCode}
+		</foreach>
+		)
+
+		ORDER BY
+		ISNULL(A.TradingDay),
+		<choose>
+			<when test="statisType == 0">
+				ISNULL(A.NVDailyGrowthRate),
+				A.NVDailyGrowthRate
+			</when>
+			<when test="statisType == 1">
+				ISNULL(A.RRInSingleWeek),
+				A.RRInSingleWeek
+			</when>
+			<when test="statisType == 2">
+				ISNULL(A.RRInSingleMonth),
+				A.RRInSingleMonth
+			</when>
+			<when test="statisType == 3">
+				ISNULL(A.RRInThreeMonth),
+				A.RRInThreeMonth
+			</when>
+			<when test="statisType == 4">
+				ISNULL(A.RRInSixMonth),
+				A.RRInSixMonth
+			</when>
+			<when test="statisType == 5">
+				ISNULL(A.RRInSingleYear),
+				A.RRInSingleYear
+			</when>
+			<when test="statisType == 6">
+				ISNULL(A.RRInTwoYear),
+				A.RRInTwoYear
+			</when>
+			<when test="statisType == 7">
+				ISNULL(A.RRInThreeYear),
+				A.RRInThreeYear
+			</when>
+			<when test="statisType == 8">
+				ISNULL(A.RRSinceThisYear),
+				A.RRSinceThisYear
+			</when>
+			<otherwise>
+				ISNULL(A.NVDailyGrowthRate),
+				A.NVDailyGrowthRate
+			</otherwise>
+		</choose>
+		<choose>
+			<when test="sort == 0">
+				ASC
+			</when>
+			<otherwise>
+				DESC
+			</otherwise>
+		</choose>
+	</select>
+
+</mapper>

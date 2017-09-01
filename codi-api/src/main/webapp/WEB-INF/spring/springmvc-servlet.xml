@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+	http://www.springframework.org/schema/mvc
+	http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context-3.2.xsd
+	http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd">
+
+    <import resource="classpath:spring-application.xml"/>
+    <import resource="/superman-biz.xml"/>
+    <import resource="classpath:spring/sys-api.xml"/>
+
+    <bean id="fastJsonConverter4" class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>application/json</value>
+                <value>application/xml;charset=UTF-8</value>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+        <property name="fastJsonConfig">
+            <bean class="com.alibaba.fastjson.support.config.FastJsonConfig">
+                <property name="serializerFeatures">
+                    <list>
+                        <!-- <value>WriteMapNullValue</value> -->
+                        <value>QuoteFieldNames</value>
+                        <value>WriteDateUseDateFormat</value>
+                    </list>
+                </property>
+            </bean>
+        </property>
+    </bean>
+
+    <!-- 注解驱动, Spring-MVC配置 -->
+    <mvc:annotation-driven validator="validatorAdapter" message-codes-resolver="noCodeMessageCodeReslover">
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" index="0"></constructor-arg>
+            </bean>
+            <ref local="fastJsonConverter4"/>
+        </mvc:message-converters>
+        <mvc:argument-resolvers>
+            <bean class="org.springframework.data.web.PageableHandlerMethodArgumentResolver">
+                <property name="oneIndexedParameters" value="false"/>
+                <property name="fallbackPageable">
+                    <bean class="org.springframework.data.domain.PageRequest">
+                        <constructor-arg name="page" value="1"/>
+                        <constructor-arg name="size" value="10"/>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:argument-resolvers>
+    </mvc:annotation-driven>
+
+    <!-- 注解驱动, Spring-MVC 拦截器配置 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.codi.base.spring.interceptor.MDCInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/acc/**"/>
+            <mvc:mapping path="/bank/**"/>
+            <mvc:mapping path="/query/**"/>
+            <mvc:mapping path="/query/v2/**"/>
+            <mvc:mapping path="/trade/**"/>
+            <mvc:mapping path="/pe/**"/>
+            <mvc:mapping path="/operation/v2/**"/>
+            <mvc:exclude-mapping path="/acc/validate-token"/>
+            <mvc:exclude-mapping path="/acc/login"/>
+            <bean class="com.codi.api.interceptor.ValidateAppVersionInterceptor2"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/acc/pay-open/v2"/>
+            <mvc:mapping path="/pe/**"/>
+            <mvc:mapping path="/client/**"/>
+            <bean class="com.codi.api.interceptor.ValidateTokenInterceptor"/>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/acc/v2/login"/>
+            <bean class="com.codi.api.interceptor.ValidateSignInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <!-- Servlet Filter Bean -->
+    <bean id="exceptionTranslationFilter" class="com.codi.api.web.filter.ExceptionTranslationFilter"/>
+    <bean id="validateTokenFilter" class="com.codi.api.security.ValidateTokenFilter"/>
+    <bean id="noCodeMessageCodeReslover" class="com.codi.base.web.SimpleMessageCodeReslover"/>
+
+    <bean class="org.springframework.validation.beanvalidation.MethodValidationPostProcessor"/>
+
+    <!-- 方法日志记录切面 -->
+    <bean id="fastJSONAPILogAspect" class="com.codi.bus.core.aop.FastJSONAPILogAspect"/>
+    <aop:config>
+        <aop:aspect ref="fastJSONAPILogAspect" order="1">
+            <aop:pointcut
+                expression="within(com.codi.api.controller..*) and @annotation(com.codi.base.log.annotation.Loggable)"
+                id="fastJSONAPILogPointCut"/>
+            <aop:around method="around" pointcut-ref="fastJSONAPILogPointCut"/>
+        </aop:aspect>
+    </aop:config>
+
+    <context:component-scan base-package="com.codi.api.controller" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <context:component-scan base-package="com.codi.api.validation" use-default-filters="false">
+        <context:include-filter type="annotation" expression="com.codi.bus.core.annotation.Validator"/>
+    </context:component-scan>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+</beans>

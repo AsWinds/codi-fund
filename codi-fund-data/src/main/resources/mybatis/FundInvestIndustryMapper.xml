@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundInvestIndustry">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundInvestIndustry">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="ReportDate" property="reportDate" jdbcType="TIMESTAMP" />
+		<result column="InvestType" property="investType" jdbcType="INTEGER" />
+		<result column="IndustryCode" property="industryCode" jdbcType="INTEGER" />
+		<result column="IndustryName" property="industryName" jdbcType="VARCHAR" />
+		<result column="MarketValue" property="marketValue" jdbcType="DECIMAL" />
+		<result column="RatioInNV" property="ratioInNV" jdbcType="DECIMAL" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="InduStandard" property="induStandard" jdbcType="INTEGER" />
+		<result column="InduDiscCode" property="induDiscCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		ReportDate, InvestType, IndustryCode,
+		IndustryName, MarketValue, RatioInNV,
+		XGRQ, JSID, InduStandard,
+		InduDiscCode
+	</sql>
+
+	<select id="selectLatest" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		SELECT
+		A.ReportDate,
+		A.IndustryCode,
+		A.IndustryName,
+		A.MarketValue,
+		A.RatioInNV
+		FROM
+		MF_InvestIndustry A,
+		(SELECT
+		MAX(TEMP.ReportDate) AS 'ReportDate'
+		FROM
+		MF_InvestIndustry TEMP
+		WHERE
+		TEMP.InnerCode = #{innerCode}) B
+		WHERE
+		A.InnerCode = #{innerCode}
+		AND A.IndustryCode <![CDATA[ <> ]]> 10001
+		AND A.ReportDate =
+		B.ReportDate
+		ORDER BY
+		A.MarketValue DESC;
+	</select>
+
+</mapper>

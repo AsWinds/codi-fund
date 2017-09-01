@@ -1,0 +1,50 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.codi</groupId>
+		<artifactId>codi-fund</artifactId>
+		<version>1.4.3</version>
+	</parent>
+
+	<artifactId>codi-hundsunapi</artifactId>
+	<packaging>jar</packaging>
+	<name>codi-hundsunapi</name>
+	<url>http://maven.apache.org</url>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.codi</groupId>
+			<artifactId>codi-bus-base</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.codi</groupId>
+			<artifactId>codi-trade-service</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>dom4j</groupId>
+			<artifactId>dom4j</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.hundsun.fcloud.ufx</groupId>
+			<artifactId>ufx-sdk</artifactId>
+		</dependency>
+	</dependencies>
+</project>

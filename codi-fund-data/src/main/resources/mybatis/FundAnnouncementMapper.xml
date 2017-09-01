@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundAnnouncement">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundAnnouncement">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="Title" property="title" jdbcType="VARCHAR" />
+		<result column="SubTitle" property="subTitle" jdbcType="VARCHAR" />
+		<result column="CategoryType" property="categoryType" jdbcType="INTEGER" />
+		<result column="PublicDate" property="publicDate" jdbcType="TIMESTAMP" />
+		<result column="Media" property="media" jdbcType="VARCHAR" />
+		<result column="ResourceType" property="resourceType" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.codi.fundData.domain.FundAnnouncement" extends="BaseResultMap">
+		<result column="Content" property="content" jdbcType="LONGVARCHAR" />
+	</resultMap>
+	<sql id="Blob_Column_List">
+		Content
+	</sql>
+	<sql id="Base_Column_List_Announcement">
+		ID,
+		InfoTitle AS 'title',
+		SubTitle,
+		Content,
+		category AS 'contentType',
+		InfoPublDate
+		AS 'PublicDate',
+		media,
+		'FROM_ANNOUNCEMENT' AS 'ResourceType'
+	</sql>
+	<sql id="Base_Column_List_InterimBulletin">
+		ID,
+		InfoTitle AS 'Title',
+		'NO_SUB_TITLE'
+		AS 'SubTitle,',
+		Detail AS 'Content',
+		bulletinType AS 'ContentType',
+		BulletinDate AS 'PublicDate',
+		media,
+		'FROM_INTERIMBULLETIN' AS 'ResourceType'
+	</sql>
+
+
+	<select id="selectFromAnnouncement" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List_Announcement" />
+		from
+		MF_Announcement
+		where ID=#{ID}
+	</select>
+
+	<select id="selectFromInterimBulletin" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List_InterimBulletin" />
+		from
+		MF_InterimBulletin
+		where ID=#{ID}
+	</select>
+
+	<select id="selectAnnouncement" resultMap="BaseResultMap">
+
+		SELECT
+		*
+		FROM
+		((SELECT
+		b.ID,
+		b.InfoTitle AS 'Title',
+		'NO_SUB_TITLE'
+		AS
+		'SubTitle,',
+		b.bulletinType AS 'ContentType',
+		b.BulletinDate AS 'PublicDate',
+		b.media,
+		'FROM_INTERIMBULLETIN' AS
+		'ResourceType'
+		FROM
+		MF_InterimBulletin b,
+		(SELECT
+		ID
+		FROM
+		MF_InterimBulletin_SE a
+		WHERE
+		a.Code =
+		#{innerCode}) TEMP
+		WHERE
+		b.ID =
+		TEMP.ID)
+		UNION
+		(SELECT
+		c.ID,
+		c.InfoTitle AS 'title',
+		c.SubTitle,
+		c.category AS 'contentType',
+		c.InfoPublDate
+		AS 'PublicDate',
+		c.media,
+		'FROM_ANNOUNCEMENT' AS 'ResourceType'
+		FROM
+		MF_Announcement c
+		WHERE
+		c.InnerCode =
+		#{innerCode})) D
+		ORDER BY
+		D.PublicDate DESC
+	</select>
+
+
+</mapper>

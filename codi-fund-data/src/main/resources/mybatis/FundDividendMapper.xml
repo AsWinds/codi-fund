@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundDividend">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundDividend">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="EndDate" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="UnitProfit" property="unitProfit" jdbcType="DECIMAL" />
+		<result column="UnitRetainedProfit" property="unitRetainedProfit" jdbcType="DECIMAL" />
+		<result column="IfDistributed" property="ifDistributed" jdbcType="TINYINT" />
+		<result column="DividendRatioBeforeTax" property="dividendRatioBeforeTax" jdbcType="DECIMAL" />
+		<result column="ActualRatioAfterTax" property="actualRatioAfterTax" jdbcType="DECIMAL" />
+		<result column="Dividendsum" property="dividendsum" jdbcType="DECIMAL" />
+		<result column="ReDate" property="reDate" jdbcType="TIMESTAMP" />
+		<result column="ExRightDate" property="exRightDate" jdbcType="TIMESTAMP" />
+		<result column="ExecuteDate" property="executeDate" jdbcType="TIMESTAMP" />
+		<result column="SchemeModification" property="schemeModification" jdbcType="VARCHAR" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="ReinvestDay" property="reinvestDay" jdbcType="TIMESTAMP" />
+		<result column="AccountDay" property="accountDay" jdbcType="TIMESTAMP" />
+		<result column="RedemptionDay" property="redemptionDay" jdbcType="TIMESTAMP" />
+		<result column="UnitProfitYTD" property="unitProfitYTD" jdbcType="DECIMAL" />
+		<result column="DividendSumYTD" property="dividendSumYTD" jdbcType="DECIMAL" />
+		<result column="DividendTimesYTD" property="dividendTimesYTD" jdbcType="INTEGER" />
+		<result column="DiviSumSinceInception" property="diviSumSinceInception" jdbcType="DECIMAL" />
+		<result column="DiviTimesSinceIncepion" property="diviTimesSinceIncepion" jdbcType="INTEGER" />
+		<result column="EventProcedureCode" property="eventProcedureCode" jdbcType="INTEGER" />
+		<result column="EventProcedure" property="eventProcedure" jdbcType="VARCHAR" />
+		<result column="ExRightDateEX" property="exRightDateEX" jdbcType="TIMESTAMP" />
+		<result column="ExRightDateCurbEX" property="exRightDateCurbEX" jdbcType="TIMESTAMP" />
+		<result column="ExecuteDateEX" property="executeDateEX" jdbcType="TIMESTAMP" />
+		<result column="ExecuteDateCurbEX" property="executeDateCurbEX" jdbcType="TIMESTAMP" />
+		<result column="DistributableProfits" property="distributableProfits" jdbcType="DECIMAL" />
+		<result column="AllocationValue" property="allocationValue" jdbcType="DECIMAL" />
+	</resultMap>
+
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		InfoSource, EndDate, UnitProfit,
+		UnitRetainedProfit, IfDistributed,
+		DividendRatioBeforeTax,
+		ActualRatioAfterTax, Dividendsum, ReDate,
+		ExRightDate, ExecuteDate, SchemeModification,
+		XGRQ,
+		JSID, ReinvestDay,
+		AccountDay, RedemptionDay, UnitProfitYTD,
+		DividendSumYTD, DividendTimesYTD, DiviSumSinceInception,
+		DiviTimesSinceIncepion, EventProcedureCode,
+		EventProcedure, ExRightDateEX, ExRightDateCurbEX,
+		ExecuteDateEX,
+		ExecuteDateCurbEX, DistributableProfits,
+		AllocationValue
+	</sql>
+
+	<select id="selectFundDividendList" resultMap="BaseResultMap" parameterType="java.util.Map">
+		select
+		DividendRatioBeforeTax,
+		ActualRatioAfterTax,
+		ReDate,
+		ExRightDate,
+		ExecuteDate
+
+		from MF_Dividend
+		where InnerCode=#{innerCode}
+
+		<if test="ifDistributed != null">
+			AND IfDistributed=#{ifDistributed}
+		</if>
+		order by ReDate desc
+	</select>
+
+</mapper>

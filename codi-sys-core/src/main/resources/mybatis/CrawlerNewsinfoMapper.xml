@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+  <resultMap id="BaseResultMap" type="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="release_date" property="releaseDate" jdbcType="TIMESTAMP" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="crawler_date" property="crawlerDate" jdbcType="TIMESTAMP" />
+    <result column="match_degree" property="matchDegree" jdbcType="CHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.codi.bus.core.sys.domain.CrawlerNewsinfo" extends="BaseResultMap" >
+    <result column="main_content" property="mainContent" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, link, release_date, source, crawler_date, match_degree
+  </sql>
+  <sql id="Blob_Column_List" >
+    main_content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from crawler_newsinfos
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="queryByPage" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+      SELECT
+      <include refid="Base_Column_List"/>
+      ,
+      <include refid="Blob_Column_List"/>
+      from crawler_newsinfos
+      ORDER by match_degree, release_date DESC
+  </select>
+
+  <select id="querySearch" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+      SELECT
+      <include refid="Base_Column_List"/>
+      ,
+      <include refid="Blob_Column_List"/>
+      from crawler_newsinfos
+      where title like concat('%',#{search,jdbcType=VARCHAR},'%')
+      or main_content like concat('%',#{search,jdbcType=VARCHAR},'%')
+      ORDER BY match_degree, release_date DESC
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from crawler_newsinfos
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+    insert into crawler_newsinfos (id, title, link,
+      release_date, source, crawler_date,
+      match_degree, main_content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR},
+      #{releaseDate,jdbcType=TIMESTAMP}, #{source,jdbcType=VARCHAR}, #{crawlerDate,jdbcType=TIMESTAMP},
+      #{matchDegree,jdbcType=CHAR}, #{mainContent,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+    insert into crawler_newsinfos
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="link != null" >
+        link,
+      </if>
+      <if test="releaseDate != null" >
+        release_date,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="crawlerDate != null" >
+        crawler_date,
+      </if>
+      <if test="matchDegree != null" >
+        match_degree,
+      </if>
+      <if test="mainContent != null" >
+        main_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseDate != null" >
+        #{releaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="crawlerDate != null" >
+        #{crawlerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="matchDegree != null" >
+        #{matchDegree,jdbcType=CHAR},
+      </if>
+      <if test="mainContent != null" >
+        #{mainContent,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+    update crawler_newsinfos
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="releaseDate != null" >
+        release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="crawlerDate != null" >
+        crawler_date = #{crawlerDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="matchDegree != null" >
+        match_degree = #{matchDegree,jdbcType=CHAR},
+      </if>
+      <if test="mainContent != null" >
+        main_content = #{mainContent,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+    update crawler_newsinfos
+    set title = #{title,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=VARCHAR},
+      crawler_date = #{crawlerDate,jdbcType=TIMESTAMP},
+      match_degree = #{matchDegree,jdbcType=CHAR},
+      main_content = #{mainContent,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.codi.bus.core.sys.domain.CrawlerNewsinfo" >
+    update crawler_newsinfos
+    set title = #{title,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      release_date = #{releaseDate,jdbcType=TIMESTAMP},
+      source = #{source,jdbcType=VARCHAR},
+      crawler_date = #{crawlerDate,jdbcType=TIMESTAMP},
+      match_degree = #{matchDegree,jdbcType=CHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

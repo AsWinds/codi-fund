@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.bus.core.sys.dao.SysNewsDao" >
+  <resultMap id="BaseResultMap" type="com.codi.bus.core.sys.domain.SysNews" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="brief_title" property="briefTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="source" property="source" jdbcType="VARCHAR" />
+    <result column="from_url" property="fromUrl" jdbcType="VARCHAR" />
+    <result column="publish_date" property="publishDate" jdbcType="TIMESTAMP" />
+    <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
+    <result column="location" property="location" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="publisher" property="publisher" jdbcType="VARCHAR" />
+    <result column="keyword" property="keyword" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.codi.bus.core.sys.domain.SysNews" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, title, brief_title, description, source, from_url, publish_date, modify_date, location, status, publisher, 
+    keyword
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_news
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from sys_news
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.codi.bus.core.sys.domain.SysNews" useGeneratedKeys="true"
+    keyProperty="id" keyColumn="id">
+    insert into sys_news (id, title, brief_title, 
+      description, source, 
+      from_url, publish_date, modify_date, 
+      location, status, publisher, 
+      keyword, content)
+    values (#{id,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{briefTitle,jdbcType=VARCHAR}, 
+      #{description,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR}, 
+      #{fromUrl,jdbcType=VARCHAR}, #{publishDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}, 
+      #{location,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{publisher,jdbcType=VARCHAR}, 
+      #{keyword,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.codi.bus.core.sys.domain.SysNews" useGeneratedKeys="true"
+    keyProperty="id" keyColumn="id">
+    insert into sys_news
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="briefTitle != null" >
+        briefTitle,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="source != null" >
+        source,
+      </if>
+      <if test="fromUrl != null" >
+        from_url,
+      </if>
+      <if test="publishDate != null" >
+        publish_date,
+      </if>
+      <if test="modifyDate != null" >
+        modify_date,
+      </if>
+      <if test="location != null" >
+        location,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="publisher != null" >
+        publisher,
+      </if>
+      <if test="keyword != null" >
+        keyword,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="briefTitle != null" >
+        #{briefTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUrl != null" >
+        #{fromUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="publisher != null" >
+        #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.codi.bus.core.sys.domain.SysNews" >
+    update sys_news
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="briefTitle != null" >
+        brief_title = #{briefTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="source != null" >
+        source = #{source,jdbcType=VARCHAR},
+      </if>
+      <if test="fromUrl != null" >
+        from_url = #{fromUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="publishDate != null" >
+        publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifyDate != null" >
+        modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="location != null" >
+        location = #{location,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="publisher != null" >
+        publisher = #{publisher,jdbcType=VARCHAR},
+      </if>
+      <if test="keyword != null" >
+        keyword = #{keyword,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.codi.bus.core.sys.domain.SysNews" >
+    update sys_news
+    set title = #{title,jdbcType=VARCHAR},
+      brief_title = #{briefTitle,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      from_url = #{fromUrl,jdbcType=VARCHAR},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      keyword = #{keyword,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.codi.bus.core.sys.domain.SysNews" >
+    update sys_news
+    set title = #{title,jdbcType=VARCHAR},
+      brief_title = #{briefTitle,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      source = #{source,jdbcType=VARCHAR},
+      from_url = #{fromUrl,jdbcType=VARCHAR},
+      publish_date = #{publishDate,jdbcType=TIMESTAMP},
+      modify_date = #{modifyDate,jdbcType=TIMESTAMP},
+      location = #{location,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      publisher = #{publisher,jdbcType=VARCHAR},
+      keyword = #{keyword,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <select id="findAll" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_news
+    order by id desc
+  </select>
+  
+  <select id="searchAll" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from sys_news
+    where title like CONCAT(CONCAT('%',#{kw,jdbcType=VARCHAR}),'%')
+    or content like CONCAT(CONCAT('%',#{kw,jdbcType=VARCHAR}),'%')
+    or keyword like CONCAT(CONCAT('%',#{kw,jdbcType=VARCHAR}),'%')
+    order by id desc
+  </select>
+  
+  <select id="findByLocationAndStatus" resultMap="ResultMapWithBLOBs" parameterType="java.util.Map">
+    select
+    <include refid="Base_Column_List" />
+    from sys_news
+    where status = #{status,jdbcType=VARCHAR} and location = #{location,jdbcType=VARCHAR} and publish_date &lt; NOW()
+    order by publish_date desc
+  </select>
+</mapper>

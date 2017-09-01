@@ -1,0 +1,55 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <parent>
+        <artifactId>codi-fund</artifactId>
+        <groupId>com.codi</groupId>
+        <version>1.4.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>codi-crawler</artifactId>
+    <packaging>war</packaging>
+    <name>codi-crawler Maven Webapp</name>
+    <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>com.codi</groupId>
+            <artifactId>superman-base</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.codi</groupId>
+            <artifactId>codi-message</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.codi</groupId>
+            <artifactId>codi-crawler-core</artifactId>
+            <version>1.4.3</version>
+        </dependency>
+
+        <!-- freemarker -->
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+    <build>
+        <finalName>codi-crawler</finalName>
+        <plugins>
+            <!-- 加入maven deploy插件，当在deploy时，忽略些model-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.8.2</version>
+                <configuration>
+                    <skip>true</skip>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>

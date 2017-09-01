@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundManager">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundManager">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InnerCode" property="innerCode" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="PersonalCode" property="personalCode" jdbcType="BIGINT" />
+		<result column="Name" property="name" jdbcType="VARCHAR" />
+		<result column="PostName" property="postName" jdbcType="INTEGER" />
+		<result column="Incumbent" property="incumbent" jdbcType="TINYINT" />
+		<result column="AccessionDate" property="accessionDate" jdbcType="TIMESTAMP" />
+		<result column="DimissionDate" property="dimissionDate" jdbcType="TIMESTAMP" />
+		<result column="ManagementTime" property="managementTime" jdbcType="INTEGER" />
+		<result column="Performance" property="performance" jdbcType="DECIMAL" />
+		<result column="Notes" property="notes" jdbcType="VARCHAR" />
+		<result column="UpdateTime" property="updateTime" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+	</resultMap>
+
+	<sql id="base-column-list">
+		ID, InnerCode, InfoPublDate,
+		InfoSource, PersonalCode, Name,
+		PostName, Incumbent, AccessionDate,
+		DimissionDate, ManagementTime, Performance,
+		Notes, UpdateTime, JSID
+	</sql>
+
+	<select id="selectManager" resultMap="BaseResultMap" parameterType="com.codi.fundData.domain.FundManager">
+		select
+		<include refid="base-column-list" />
+		from
+		MF_FundManagerNew a
+		where a.InnerCode=#{innerCode}
+		<if test="incumbent != null">
+			AND a.Incumbent=#{incumbent}
+		</if>
+		<if test="personalCode != null">
+			AND a.Personalcode=#{personalCode}
+		</if>
+		order by a.AccessionDate desc
+	</select>
+
+	<select id="selectManagerPerformance" resultType="java.util.Map" parameterType="java.util.Map">
+		SELECT
+		a.AccessionDate,
+		a.DimissionDate,
+		a.Performance,
+		b.SecuCode,
+		b.ChiNameAbbr,
+		b.SecuAbbr
+		FROM
+		MF_FundManagerNew a
+		LEFT
+		JOIN
+		SecuMain b ON a.InnerCode=b.InnerCode
+		WHERE
+		a.PersonalCode = #{personalCode}
+		<if test="incumbent != null">
+			AND a.Incumbent = #{incumbent}
+		</if>
+		order by a.AccessionDate DESC
+	</select>
+
+</mapper>

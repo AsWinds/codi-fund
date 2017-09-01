@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.crawler.core.dao.CrawlerWebsiteDao" >
+  <resultMap id="BaseResultMap" type="com.codi.crawler.core.domain.CrawlerWebsite" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="link" property="link" jdbcType="VARCHAR" />
+    <result column="selector_father_node" property="selectorFatherNode" jdbcType="VARCHAR" />
+    <result column="selector_link" property="selectorLink" jdbcType="VARCHAR" />
+    <result column="selector_date" property="selectorDate" jdbcType="VARCHAR" />
+    <result column="operate_date" property="operateDate" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, link, selector_father_node, selector_link, selector_date, operate_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from crawler_website
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from crawler_website
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from crawler_website
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.codi.crawler.core.domain.CrawlerWebsite" >
+    insert into crawler_website (id, name, link,
+      selector_father_node, selector_link, selector_date,
+      operate_date)
+    values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{link,jdbcType=VARCHAR},
+      #{selectorFatherNode,jdbcType=VARCHAR}, #{selectorLink,jdbcType=VARCHAR}, #{selectorDate,jdbcType=VARCHAR},
+      #{operateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.codi.crawler.core.domain.CrawlerWebsite" >
+    insert into crawler_website
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="link != null" >
+        link,
+      </if>
+      <if test="selectorFatherNode != null" >
+        selector_father_node,
+      </if>
+      <if test="selectorLink != null" >
+        selector_link,
+      </if>
+      <if test="selectorDate != null" >
+        selector_date,
+      </if>
+      <if test="operateDate != null" >
+        operate_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="selectorFatherNode != null" >
+        #{selectorFatherNode,jdbcType=VARCHAR},
+      </if>
+      <if test="selectorLink != null" >
+        #{selectorLink,jdbcType=VARCHAR},
+      </if>
+      <if test="selectorDate != null" >
+        #{selectorDate,jdbcType=VARCHAR},
+      </if>
+      <if test="operateDate != null" >
+        #{operateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.codi.crawler.core.domain.CrawlerWebsite" >
+    update crawler_website
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="link != null" >
+        link = #{link,jdbcType=VARCHAR},
+      </if>
+      <if test="selectorFatherNode != null" >
+        selector_father_node = #{selectorFatherNode,jdbcType=VARCHAR},
+      </if>
+      <if test="selectorLink != null" >
+        selector_link = #{selectorLink,jdbcType=VARCHAR},
+      </if>
+      <if test="selectorDate != null" >
+        selector_date = #{selectorDate,jdbcType=VARCHAR},
+      </if>
+      <if test="operateDate != null" >
+        operate_date = #{operateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.codi.crawler.core.domain.CrawlerWebsite" >
+    update crawler_website
+    set name = #{name,jdbcType=VARCHAR},
+      link = #{link,jdbcType=VARCHAR},
+      selector_father_node = #{selectorFatherNode,jdbcType=VARCHAR},
+      selector_link = #{selectorLink,jdbcType=VARCHAR},
+      selector_date = #{selectorDate,jdbcType=VARCHAR},
+      operate_date = #{operateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+    <select id="listWebsites" parameterType="java.util.Map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List" />
+        from crawler_website
+    </select>
+</mapper>

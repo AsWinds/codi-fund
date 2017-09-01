@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundRating">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundRating">
+
+		<result column="ID" property="id" jdbcType="BIGINT" />
+		<result column="OrganizationCode" property="organizationCode" jdbcType="INTEGER" />
+		<result column="ReportPeriod" property="reportPeriod" jdbcType="INTEGER" />
+		<result column="InfoPublDate" property="infoPublDate" jdbcType="TIMESTAMP" />
+		<result column="InfoSource" property="infoSource" jdbcType="VARCHAR" />
+		<result column="EndDate" property="endDate" jdbcType="TIMESTAMP" />
+		<result column="FundInnerCode" property="fundInnerCode" jdbcType="INTEGER" />
+		<result column="InvestmentStyle" property="investmentStyle" jdbcType="INTEGER" />
+		<result column="UnitNV" property="unitNV" jdbcType="DECIMAL" />
+		<result column="WeeklyYield" property="weeklyYield" jdbcType="DECIMAL" />
+		<result column="MonthlyYield" property="monthlyYield" jdbcType="DECIMAL" />
+		<result column="YieldFor3Month" property="yieldFor3Month" jdbcType="DECIMAL" />
+		<result column="YieldFor6Month" property="yieldFor6Month" jdbcType="DECIMAL" />
+		<result column="YieldFor1year" property="yieldFor1year" jdbcType="DECIMAL" />
+		<result column="YieldFor2year" property="yieldFor2year" jdbcType="DECIMAL" />
+		<result column="YieldFor3year" property="yieldFor3year" jdbcType="DECIMAL" />
+		<result column="YieldFor5year" property="yieldFor5year" jdbcType="DECIMAL" />
+		<result column="YieldFor10year" property="yieldFor10year" jdbcType="DECIMAL" />
+		<result column="YieldForThisyear" property="yieldForThisyear" jdbcType="DECIMAL" />
+		<result column="YieldSinceFounded" property="yieldSinceFounded" jdbcType="DECIMAL" />
+		<result column="RatingPeriod" property="ratingPeriod" jdbcType="INTEGER" />
+		<result column="EndDateOfRatingPeriod" property="endDateOfRatingPeriod" jdbcType="TIMESTAMP" />
+		<result column="Stdev" property="stdev" jdbcType="DECIMAL" />
+		<result column="StdevEvaluation" property="stdevEvaluation" jdbcType="INTEGER" />
+		<result column="RiskFactor" property="riskFactor" jdbcType="DECIMAL" />
+		<result column="RiskEvaluation" property="riskEvaluation" jdbcType="INTEGER" />
+		<result column="SharpRatio" property="sharpRatio" jdbcType="DECIMAL" />
+		<result column="SharpRatioEvaluation" property="sharpRatioEvaluation" jdbcType="INTEGER" />
+		<result column="RatingIndicator" property="ratingIndicator" jdbcType="DECIMAL" />
+		<result column="StarRank" property="starRank" jdbcType="INTEGER" />
+		<result column="XGRQ" property="xgrq" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="jsid" jdbcType="BIGINT" />
+	</resultMap>
+	<sql id="Base-Column-List">
+		ID, OrganizationCode, ReportPeriod,
+		InfoPublDate, InfoSource, EndDate,
+		FundInnerCode, InvestmentStyle,
+		UnitNV,
+		WeeklyYield, MonthlyYield, YieldFor3Month,
+		YieldFor6Month, YieldFor1year, YieldFor2year,
+		YieldFor3year,
+		YieldFor5year, YieldFor10year,
+		YieldForThisyear, YieldSinceFounded, RatingPeriod,
+		EndDateOfRatingPeriod, Stdev,
+		StdevEvaluation,
+		RiskFactor, RiskEvaluation, SharpRatio,
+		SharpRatioEvaluation, RatingIndicator,
+		StarRank, XGRQ, JSID
+	</sql>
+
+	<select id="selectLatest" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select
+		ID, EndDate, StarRank
+		FROM
+		MF_FundRating
+		A,
+		(
+		SELECT MAX(B.ID) AS 'MAX_ID' FROM MF_FundRating B WHERE B.FundInnerCode = #{innerCode}
+		) TEMP
+
+		WHERE
+		A.ID=TEMP.MAX_ID
+		AND
+		A.FundInnerCode = #{innerCode};
+	</select>
+
+</mapper>

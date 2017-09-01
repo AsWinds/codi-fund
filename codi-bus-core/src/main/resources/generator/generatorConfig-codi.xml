@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+  PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+  "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<context id="Mysql" targetRuntime="MyBatis3">
+        <!-- 继承BaseDomain -->
+        <plugin type="com.codi.base.mybatis.generator.plugins.BaseDomainPlugin">
+            <property name="addGWTInterface" value="true"/>
+        </plugin>
+
+        <!-- 将UserMapper改名为UserDao 接口 -->
+        <plugin type="com.codi.base.mybatis.generator.plugins.rename.RenameJavaMapperPlugin">
+            <property name="searchString" value="Mapper$"/>
+            <property name="replaceString" value="Dao"/>
+        </plugin>
+
+        <plugin type="com.codi.base.mybatis.generator.plugins.BaseDaoPlugin"/>
+
+        <!-- 自定义注释 -->
+        <commentGenerator type="com.codi.base.mybatis.generator.plugins.comment.CustomCommentGenerator">
+            <property name="suppressDate" value="true"/>
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+
+        <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://121.40.187.122:3306/codi_dev"
+			userId="admin" password="AdminCodi0926sql">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.codi.bus.core.domain" targetProject="src/main/java">
+			<!-- enableSubPackages:是否让schema作为包的后缀 -->
+			<property name="enableSubPackages" value="false" />
+			<!-- 从数据库返回的值被清理前后的空格 -->
+			<property name="trimStrings" value="true" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="mybatis" targetProject="src/main/resources">
+			<property name="enableSubPackages" value="false" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="XMLMAPPER" targetPackage="com.codi.bus.core.dao" targetProject="src/main/java">
+			<property name="enableSubPackages" value="false" />
+		</javaClientGenerator>
+
+        <table schema="codi_dev" tableName="fund_warning_mark_his" domainObjectName="WarningMarkHis" enableInsert="true"
+               enableCountByExample="false" enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false"
+               selectByExampleQueryId="false">
+            <property name="useActualColumnNames" value="false"/>
+            <!-- 生成代码时，去掉列名的前缀 -->
+            <columnRenamingRule searchString="^uf_|^ur_" replaceString=""/>
+        </table>
+	</context>
+</generatorConfiguration>

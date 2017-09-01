@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.fundData.domain.FundInvestAdvisorOutline">
+	<resultMap id="BaseResultMap" type="com.codi.fundData.domain.FundInvestAdvisorOutline">
+		<result column="ID" property="ID" jdbcType="BIGINT" />
+		<result column="InvestAdvisorCode" property="investAdvisorCode" jdbcType="INTEGER" />
+		<result column="InvestAdvisorName" property="investAdvisorName" jdbcType="VARCHAR" />
+		<result column="InvestAdvisorAbbrName" property="investAdvisorAbbrName" jdbcType="VARCHAR" />
+		<result column="LegalRepr" property="legalRepr" jdbcType="VARCHAR" />
+		<result column="GeneralManager" property="generalManager" jdbcType="VARCHAR" />
+		<result column="EstablishmentDate" property="establishmentDate" jdbcType="TIMESTAMP" />
+		<result column="OrganizationForm" property="organizationForm" jdbcType="VARCHAR" />
+		<result column="RegCapital" property="regCapital" jdbcType="DECIMAL" />
+		<result column="RegAddr" property="regAddr" jdbcType="VARCHAR" />
+		<result column="OfficeAddr" property="officeAddr" jdbcType="VARCHAR" />
+		<result column="ZipCode" property="zipCode" jdbcType="VARCHAR" />
+		<result column="Email" property="email" jdbcType="VARCHAR" />
+		<result column="ContactAddr" property="contactAddr" jdbcType="VARCHAR" />
+		<result column="Tel" property="tel" jdbcType="VARCHAR" />
+		<result column="Fax" property="fax" jdbcType="VARCHAR" />
+		<result column="WebSite" property="webSite" jdbcType="VARCHAR" />
+		<result column="LinkMan" property="linkMan" jdbcType="VARCHAR" />
+		<result column="Region" property="region" jdbcType="INTEGER" />
+		<result column="XGRQ" property="XGRQ" jdbcType="TIMESTAMP" />
+		<result column="JSID" property="JSID" jdbcType="BIGINT" />
+		<result column="ServiceLine" property="serviceLine" jdbcType="VARCHAR" />
+		<result column="MaturityEndDate" property="maturityEndDate" jdbcType="TIMESTAMP" />
+		<result column="TACode" property="TACode" jdbcType="VARCHAR" />
+		<result column="CSRCCode" property="CSRCCode" jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="ResultMapWithBLOBs" type="com.codi.fundData.domain.FundInvestAdvisorOutline" extends="BaseResultMap">
+		<result column="Background" property="background" jdbcType="LONGVARCHAR" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		ID, InvestAdvisorCode, InvestAdvisorName, InvestAdvisorAbbrName, LegalRepr, GeneralManager,
+		EstablishmentDate, OrganizationForm, RegCapital, RegAddr, OfficeAddr, ZipCode, Email,
+		ContactAddr, Tel, Fax, WebSite,
+		LinkMan, Region, XGRQ, JSID, ServiceLine, MaturityEndDate,
+		TACode, CSRCCode, Background
+	</sql>
+
+	<select id="selectInvestAdvisorOutline" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+	select
+		<include refid="Base_Column_List" />
+		from MF_InvestAdvisorOutline
+		where InvestAdvisorCode=#{investAdvisorCode}
+	</select>
+
+
+
+</mapper>

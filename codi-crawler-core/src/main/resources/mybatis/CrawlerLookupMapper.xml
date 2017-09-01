@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.crawler.core.dao.CrawlerLookupDao" >
+  <resultMap id="BaseResultMap" type="com.codi.crawler.core.domain.CrawlerLookup" >
+    <id column="rule_lu_type" property="ruleLuType" jdbcType="VARCHAR" />
+    <id column="rule_lu_value" property="ruleLuValue" jdbcType="VARCHAR" />
+    <result column="rule_lu_text" property="ruleLuText" jdbcType="VARCHAR" />
+    <result column="rule_lu_status" property="ruleLuStatus" jdbcType="INTEGER" />
+    <result column="rule_lu_valid" property="ruleLuValid" jdbcType="BIT" />
+    <result column="rule_create_user_id" property="ruleCreateUserId" jdbcType="VARCHAR" />
+    <result column="rule_lu_create_date" property="ruleLuCreateDate" jdbcType="TIMESTAMP" />
+    <result column="rule_lu_last_updated_user_id" property="ruleLuLastUpdatedUserId" jdbcType="VARCHAR" />
+    <result column="rule_lu_last_updated_date" property="ruleLuLastUpdatedDate" jdbcType="TIMESTAMP" />
+    <result column="rule_lu_component_value" property="ruleLuComponentValue" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    rule_lu_type, rule_lu_value, rule_lu_text, rule_lu_status, rule_lu_valid, rule_create_user_id,
+    rule_lu_create_date, rule_lu_last_updated_user_id, rule_lu_last_updated_date, rule_lu_component_value
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select
+    <include refid="Base_Column_List" />
+    from rule_lu_lookup
+    where rule_lu_type = #{ruleLuType,jdbcType=VARCHAR}
+      and rule_lu_value = #{ruleLuValue,jdbcType=VARCHAR}
+  </select>
+
+    <select id="selectTriggerTime" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from rule_lu_lookup
+        WHERE rule_lu_type = 'CRAWLER' AND rule_lu_value = 'TRIGGER'
+    </select>
+
+    <update id="updateCrawlerTrigger" parameterType="com.codi.crawler.core.domain.CrawlerLookup">
+        update rule_lu_lookup
+        <set >
+            <if test="ruleLuText != null" >
+                rule_lu_text = #{ruleLuText,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleLuStatus != null" >
+                rule_lu_status = #{ruleLuStatus,jdbcType=INTEGER},
+            </if>
+            <if test="ruleLuValid != null" >
+                rule_lu_valid = #{ruleLuValid,jdbcType=BIT},
+            </if>
+            <if test="ruleCreateUserId != null" >
+                rule_create_user_id = #{ruleCreateUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleLuCreateDate != null" >
+                rule_lu_create_date = #{ruleLuCreateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ruleLuLastUpdatedUserId != null" >
+                rule_lu_last_updated_user_id = #{ruleLuLastUpdatedUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="ruleLuLastUpdatedDate != null" >
+                rule_lu_last_updated_date = #{ruleLuLastUpdatedDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="ruleLuComponentValue != null" >
+                rule_lu_component_value = #{ruleLuComponentValue,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where rule_lu_type = 'CRAWLER'
+        and rule_lu_value = 'TRIGGER'
+    </update>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rule_lu_lookup
+    where rule_lu_type = #{ruleLuType,jdbcType=VARCHAR}
+      and rule_lu_value = #{ruleLuValue,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.codi.crawler.core.domain.CrawlerLookup" >
+    insert into rule_lu_lookup (rule_lu_type, rule_lu_value, rule_lu_text,
+      rule_lu_status, rule_lu_valid, rule_create_user_id,
+      rule_lu_create_date, rule_lu_last_updated_user_id,
+      rule_lu_last_updated_date, rule_lu_component_value
+      )
+    values (#{ruleLuType,jdbcType=VARCHAR}, #{ruleLuValue,jdbcType=VARCHAR}, #{ruleLuText,jdbcType=VARCHAR},
+      #{ruleLuStatus,jdbcType=INTEGER}, #{ruleLuValid,jdbcType=BIT}, #{ruleCreateUserId,jdbcType=VARCHAR},
+      #{ruleLuCreateDate,jdbcType=TIMESTAMP}, #{ruleLuLastUpdatedUserId,jdbcType=VARCHAR},
+      #{ruleLuLastUpdatedDate,jdbcType=TIMESTAMP}, #{ruleLuComponentValue,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.codi.crawler.core.domain.CrawlerLookup" >
+    insert into rule_lu_lookup
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ruleLuType != null" >
+        rule_lu_type,
+      </if>
+      <if test="ruleLuValue != null" >
+        rule_lu_value,
+      </if>
+      <if test="ruleLuText != null" >
+        rule_lu_text,
+      </if>
+      <if test="ruleLuStatus != null" >
+        rule_lu_status,
+      </if>
+      <if test="ruleLuValid != null" >
+        rule_lu_valid,
+      </if>
+      <if test="ruleCreateUserId != null" >
+        rule_create_user_id,
+      </if>
+      <if test="ruleLuCreateDate != null" >
+        rule_lu_create_date,
+      </if>
+      <if test="ruleLuLastUpdatedUserId != null" >
+        rule_lu_last_updated_user_id,
+      </if>
+      <if test="ruleLuLastUpdatedDate != null" >
+        rule_lu_last_updated_date,
+      </if>
+      <if test="ruleLuComponentValue != null" >
+        rule_lu_component_value,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ruleLuType != null" >
+        #{ruleLuType,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuValue != null" >
+        #{ruleLuValue,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuText != null" >
+        #{ruleLuText,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuStatus != null" >
+        #{ruleLuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="ruleLuValid != null" >
+        #{ruleLuValid,jdbcType=BIT},
+      </if>
+      <if test="ruleCreateUserId != null" >
+        #{ruleCreateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuCreateDate != null" >
+        #{ruleLuCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleLuLastUpdatedUserId != null" >
+        #{ruleLuLastUpdatedUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuLastUpdatedDate != null" >
+        #{ruleLuLastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleLuComponentValue != null" >
+        #{ruleLuComponentValue,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.codi.crawler.core.domain.CrawlerLookup" >
+    update rule_lu_lookup
+    <set >
+      <if test="ruleLuText != null" >
+        rule_lu_text = #{ruleLuText,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuStatus != null" >
+        rule_lu_status = #{ruleLuStatus,jdbcType=INTEGER},
+      </if>
+      <if test="ruleLuValid != null" >
+        rule_lu_valid = #{ruleLuValid,jdbcType=BIT},
+      </if>
+      <if test="ruleCreateUserId != null" >
+        rule_create_user_id = #{ruleCreateUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuCreateDate != null" >
+        rule_lu_create_date = #{ruleLuCreateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleLuLastUpdatedUserId != null" >
+        rule_lu_last_updated_user_id = #{ruleLuLastUpdatedUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="ruleLuLastUpdatedDate != null" >
+        rule_lu_last_updated_date = #{ruleLuLastUpdatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ruleLuComponentValue != null" >
+        rule_lu_component_value = #{ruleLuComponentValue,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where rule_lu_type = #{ruleLuType,jdbcType=VARCHAR}
+      and rule_lu_value = #{ruleLuValue,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.codi.crawler.core.domain.CrawlerLookup" >
+    update rule_lu_lookup
+    set rule_lu_text = #{ruleLuText,jdbcType=VARCHAR},
+      rule_lu_status = #{ruleLuStatus,jdbcType=INTEGER},
+      rule_lu_valid = #{ruleLuValid,jdbcType=BIT},
+      rule_create_user_id = #{ruleCreateUserId,jdbcType=VARCHAR},
+      rule_lu_create_date = #{ruleLuCreateDate,jdbcType=TIMESTAMP},
+      rule_lu_last_updated_user_id = #{ruleLuLastUpdatedUserId,jdbcType=VARCHAR},
+      rule_lu_last_updated_date = #{ruleLuLastUpdatedDate,jdbcType=TIMESTAMP},
+      rule_lu_component_value = #{ruleLuComponentValue,jdbcType=VARCHAR}
+    where rule_lu_type = #{ruleLuType,jdbcType=VARCHAR}
+      and rule_lu_value = #{ruleLuValue,jdbcType=VARCHAR}
+  </update>
+</mapper>

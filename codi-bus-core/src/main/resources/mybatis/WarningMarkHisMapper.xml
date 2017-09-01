@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.codi.bus.core.dao.WarningMarkHisDao">
+    <resultMap id="BaseResultMap" type="com.codi.bus.core.domain.WarningMarkHis">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="trade_acco" jdbcType="VARCHAR" property="tradeAcco"/>
+        <result column="warning_no" jdbcType="VARCHAR" property="warningNo"/>
+        <result column="allot_no" jdbcType="VARCHAR" property="allotNo"/>
+        <result column="client_id" jdbcType="VARCHAR" property="clientId"/>
+        <result column="client_name" jdbcType="VARCHAR" property="clientName"/>
+        <result column="id_kind_gb" jdbcType="VARCHAR" property="idKindGb"/>
+        <result column="id_no" jdbcType="VARCHAR" property="idNo"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="brower_type" jdbcType="VARCHAR" property="browerType"/>
+        <result column="mac" jdbcType="VARCHAR" property="mac"/>
+        <result column="open_id" jdbcType="VARCHAR" property="openId"/>
+        <result column="device_id" jdbcType="VARCHAR" property="deviceId"/>
+        <result column="invest_risk_tolerance" jdbcType="VARCHAR" property="investRiskTolerance"/>
+        <result column="ofund_risklevel" jdbcType="VARCHAR" property="ofundRisklevel"/>
+        <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="fund_busin_code" jdbcType="VARCHAR" property="fundBusinCode"/>
+        <result column="mark_content" jdbcType="VARCHAR" property="markContent"/>
+        <result column="place_holder" jdbcType="VARCHAR" property="placeHolder"/>
+        <result column="mark_page" jdbcType="VARCHAR" property="markPage"/>
+        <result column="mark_position" jdbcType="VARCHAR" property="markPosition"/>
+        <result column="app_version" jdbcType="VARCHAR" property="appVersion"/>
+        <result column="order_id" jdbcType="VARCHAR" property="orderId"/>
+    </resultMap>
+
+    <resultMap id="SearchResultMap" type="com.codi.bus.core.vo.WarningMarkHisSearchModel" extends="BaseResultMap">
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, status, create_date, last_update_date, user_id, trade_acco, warning_no, allot_no,
+    client_id, client_name, id_kind_gb, id_no, ip, brower_type, mac, open_id, device_id,
+    invest_risk_tolerance, ofund_risklevel, fund_code, fund_busin_code, mark_content,
+        place_holder,mark_page,mark_position,app_version, fund_name,orderId
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from fund_warning_mark_his
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from fund_warning_mark_his
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" parameterType="com.codi.bus.core.domain.WarningMarkHis">
+    insert into fund_warning_mark_his (id, status, create_date,
+      last_update_date, user_id, trade_acco,
+      warning_no, allot_no, client_id,
+      client_name, id_kind_gb, id_no,
+      ip, brower_type, mac,
+      open_id, device_id, invest_risk_tolerance,
+      ofund_risklevel, fund_code, fund_busin_code,
+        mark_content, place_holder,mark_page,mark_position,app_version, fund_name, orderId)
+    values (#{id,jdbcType=BIGINT}, #{status,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+      #{lastUpdateDate,jdbcType=TIMESTAMP}, #{userId,jdbcType=BIGINT}, #{tradeAcco,jdbcType=VARCHAR},
+      #{warningNo,jdbcType=VARCHAR}, #{allotNo,jdbcType=VARCHAR}, #{clientId,jdbcType=VARCHAR},
+      #{clientName,jdbcType=VARCHAR}, #{idKindGb,jdbcType=VARCHAR}, #{idNo,jdbcType=VARCHAR},
+      #{ip,jdbcType=VARCHAR}, #{browerType,jdbcType=VARCHAR}, #{mac,jdbcType=VARCHAR},
+      #{openId,jdbcType=VARCHAR}, #{deviceId,jdbcType=VARCHAR}, #{investRiskTolerance,jdbcType=VARCHAR},
+      #{ofundRisklevel,jdbcType=VARCHAR}, #{fundCode,jdbcType=VARCHAR}, #{fundBusinCode,jdbcType=VARCHAR},
+        #{markContent,jdbcType=VARCHAR}, #{placeHolder,jdbcType=VARCHAR}, #{markPage,jdbcType=VARCHAR},
+        #{markPosition,jdbcType=VARCHAR}, #{appVersion,jdbcType=VARCHAR}, #{fundName,jdbcType=VARCHAR},
+        #{orderId,jdbcType=VARCHAR})
+  </insert>
+    <insert id="insertSelective" parameterType="com.codi.bus.core.domain.WarningMarkHis">
+        insert into fund_warning_mark_his
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date,
+            </if>
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="tradeAcco != null">
+                trade_acco,
+            </if>
+            <if test="warningNo != null">
+                warning_no,
+            </if>
+            <if test="allotNo != null">
+                allot_no,
+            </if>
+            <if test="clientId != null">
+                client_id,
+            </if>
+            <if test="clientName != null">
+                client_name,
+            </if>
+            <if test="idKindGb != null">
+                id_kind_gb,
+            </if>
+            <if test="idNo != null">
+                id_no,
+            </if>
+            <if test="ip != null">
+                ip,
+            </if>
+            <if test="browerType != null">
+                brower_type,
+            </if>
+            <if test="mac != null">
+                mac,
+            </if>
+            <if test="openId != null">
+                open_id,
+            </if>
+            <if test="deviceId != null">
+                device_id,
+            </if>
+            <if test="investRiskTolerance != null">
+                invest_risk_tolerance,
+            </if>
+            <if test="ofundRisklevel != null">
+                ofund_risklevel,
+            </if>
+            <if test="fundCode != null">
+                fund_code,
+            </if>
+            <if test="fundBusinCode != null">
+                fund_busin_code,
+            </if>
+            <if test="markContent != null">
+                mark_content,
+            </if>
+            <if test="placeHolder != null">
+                place_holder,
+            </if>
+            <if test="markPage != null">
+                mark_page,
+            </if>
+            <if test="markPosition != null">
+                mark_position,
+            </if>
+            <if test="appVersion != null">
+                app_version,
+            </if>
+            <if test="fundName != null">
+                fund_name,
+            </if>
+            <if test="orderId != null">
+                orderId,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateDate != null">
+                #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="tradeAcco != null">
+                #{tradeAcco,jdbcType=VARCHAR},
+            </if>
+            <if test="warningNo != null">
+                #{warningNo,jdbcType=VARCHAR},
+            </if>
+            <if test="allotNo != null">
+                #{allotNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clientId != null">
+                #{clientId,jdbcType=VARCHAR},
+            </if>
+            <if test="clientName != null">
+                #{clientName,jdbcType=VARCHAR},
+            </if>
+            <if test="idKindGb != null">
+                #{idKindGb,jdbcType=VARCHAR},
+            </if>
+            <if test="idNo != null">
+                #{idNo,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="browerType != null">
+                #{browerType,jdbcType=VARCHAR},
+            </if>
+            <if test="mac != null">
+                #{mac,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceId != null">
+                #{deviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="investRiskTolerance != null">
+                #{investRiskTolerance,jdbcType=VARCHAR},
+            </if>
+            <if test="ofundRisklevel != null">
+                #{ofundRisklevel,jdbcType=VARCHAR},
+            </if>
+            <if test="fundCode != null">
+                #{fundCode,jdbcType=VARCHAR},
+            </if>
+            <if test="fundBusinCode != null">
+                #{fundBusinCode,jdbcType=VARCHAR},
+            </if>
+            <if test="markContent != null">
+                #{markContent,jdbcType=VARCHAR},
+            </if>
+            <if test="placeHolder != null">
+                #{placeHolder,jdbcType=VARCHAR},
+            </if>
+            <if test="markPage != null">
+                #{markPage,jdbcType=VARCHAR},
+            </if>
+            <if test="markPosition != null">
+                #{markPosition,jdbcType=VARCHAR},
+            </if>
+            <if test="appVersion != null">
+                #{appVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="fundName != null">
+                #{fundName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                #{orderId,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.codi.bus.core.domain.WarningMarkHis">
+        update fund_warning_mark_his
+        <set>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="tradeAcco != null">
+                trade_acco = #{tradeAcco,jdbcType=VARCHAR},
+            </if>
+            <if test="warningNo != null">
+                warning_no = #{warningNo,jdbcType=VARCHAR},
+            </if>
+            <if test="allotNo != null">
+                allot_no = #{allotNo,jdbcType=VARCHAR},
+            </if>
+            <if test="clientId != null">
+                client_id = #{clientId,jdbcType=VARCHAR},
+            </if>
+            <if test="clientName != null">
+                client_name = #{clientName,jdbcType=VARCHAR},
+            </if>
+            <if test="idKindGb != null">
+                id_kind_gb = #{idKindGb,jdbcType=VARCHAR},
+            </if>
+            <if test="idNo != null">
+                id_no = #{idNo,jdbcType=VARCHAR},
+            </if>
+            <if test="ip != null">
+                ip = #{ip,jdbcType=VARCHAR},
+            </if>
+            <if test="browerType != null">
+                brower_type = #{browerType,jdbcType=VARCHAR},
+            </if>
+            <if test="mac != null">
+                mac = #{mac,jdbcType=VARCHAR},
+            </if>
+            <if test="openId != null">
+                open_id = #{openId,jdbcType=VARCHAR},
+            </if>
+            <if test="deviceId != null">
+                device_id = #{deviceId,jdbcType=VARCHAR},
+            </if>
+            <if test="investRiskTolerance != null">
+                invest_risk_tolerance = #{investRiskTolerance,jdbcType=VARCHAR},
+            </if>
+            <if test="ofundRisklevel != null">
+                ofund_risklevel = #{ofundRisklevel,jdbcType=VARCHAR},
+            </if>
+            <if test="fundCode != null">
+                fund_code = #{fundCode,jdbcType=VARCHAR},
+            </if>
+            <if test="fundBusinCode != null">
+                fund_busin_code = #{fundBusinCode,jdbcType=VARCHAR},
+            </if>
+            <if test="markContent != null">
+                mark_content = #{markContent,jdbcType=VARCHAR},
+            </if>
+            <if test="placeHolder != null">
+                place_holder = #{placeHolder,jdbcType=VARCHAR},
+            </if>
+            <if test="markPage != null">
+                mark_page = #{markPage,jdbcType=VARCHAR},
+            </if>
+            <if test="markPosition != null">
+                mark_position = #{markPosition,jdbcType=VARCHAR},
+            </if>
+            <if test="appVersion != null">
+                app_version= #{appVersion,jdbcType=VARCHAR},
+            </if>
+            <if test="fundName != null">
+                fund_name= #{fundName,jdbcType=VARCHAR},
+            </if>
+            <if test="orderId != null">
+                order_id= #{orderId,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="search" parameterType="com.codi.bus.core.vo.WarningMarkHisSearchVo" resultMap="SearchResultMap">
+        SELECT a.id, a.status, a.create_date, a.last_update_date, a.user_id, a.trade_acco, a.warning_no, a.allot_no,
+        a.client_id, a.client_name, a.id_kind_gb, a.id_no, a.ip, a.brower_type, a.mac, a.open_id, a.device_id,
+        a.invest_risk_tolerance, a.ofund_risklevel, a.fund_code, a.fund_busin_code, a.mark_content,
+        a.place_holder,a.mark_page,a.mark_position,a.app_version, a.fund_name, a.order_id
+
+
+        b.ur_user_mobile AS mobile
+        FROM fund_warning_mark_his a LEFT JOIN ur_user b on a.user_id = b.ur_user_id
+        WHERE
+        1=1
+        <if test="idNo != null">
+            AND a.id_no LIKE CONCAT(CONCAT('%',#{idNo,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="mobile != null">
+            AND b.ur_user_mobile LIKE CONCAT(CONCAT('%',#{mobile,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="clientName != null">
+            AND a.client_name LIKE CONCAT(CONCAT('%',#{clientName,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="fundCode != null">
+            AND a.fund_code LIKE CONCAT(CONCAT('%',#{fundCode,jdbcType=VARCHAR}),'%')
+        </if>
+        <if test="createDate != null">
+            AND a.create_date=#{createDate}
+        </if>
+        ORDER BY a.create_date DESC
+    </select>
+
+
+</mapper>

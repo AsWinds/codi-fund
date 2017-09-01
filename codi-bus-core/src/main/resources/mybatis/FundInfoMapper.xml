@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.codi.bus.core.domain.FundInfo" >
+  <resultMap id="BaseResultMap" type="com.codi.bus.core.domain.FundInfo" >
+    <id column="fi_fund_id" property="fundId" jdbcType="BIGINT" />
+    <result column="fi_fund_code" property="fundCode" jdbcType="CHAR" />
+    <result column="fi_fund_name" property="fundName" jdbcType="CHAR" />
+    <result column="fi_short_name" property="shortName" jdbcType="CHAR" />
+    <result column="fi_fund_status" property="fundStatus" jdbcType="CHAR" />
+    <result column="fi_ta_no" property="taNo" jdbcType="CHAR" />
+    <result column="fi_ofund_type" property="fundType" jdbcType="CHAR" />
+    <result column="fi_total_count" property="totalCount" jdbcType="INTEGER" />
+    <result column="fi_rowCount" property="rowCount" jdbcType="INTEGER" />
+    <result column="fi_e_contract_flag" property="eContractFlag" jdbcType="CHAR" />
+    <result column="fi_create_date" property="createDate" jdbcType="TIMESTAMP" />
+    <result column="fi_last_updated_date" property="lastUpdatedDate" jdbcType="TIMESTAMP" />
+    <result column="fi_fund_type_name" property="fundTypeName" jdbcType="CHAR" />
+    <result column="fi_fund_type_code" property="fundTypeCode" jdbcType="INTEGER" />
+      <result column="fi_risk_level" property="riskLevel" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    fi_fund_id, fi_fund_code, fi_fund_name, fi_short_name, fi_fund_status, fi_ta_no, fi_fund_type_name, fi_fund_type_code,
+    fi_ofund_type, fi_total_count, fi_rowCount, fi_e_contract_flag, fi_create_date, fi_last_updated_date,fi_risk_level
+  </sql>
+
+  <!-- 查询基金基本信息 -->
+  <select id="queryFundInfo" resultMap="BaseResultMap" parameterType="java.lang.String" >
+      select
+    	fi_fund_id, fi_fund_code, fi_fund_name, fi_short_name, fi_fund_status, fi_ta_no,
+    	fi_ofund_type, fi_e_contract_flag, fi_fund_type_name, fi_fund_type_code,fi_risk_level
+    from fi_fund_info
+    where fi_fund_code like  CONCAT(CONCAT('%',#{keyword}),'%') <!-- druid拦截的关系，只能采用这种方法 -->
+      or fi_short_name like CONCAT(CONCAT('%',#{keyword}),'%')
+  </select>
+
+  <!-- 插入基金信息 -->
+  <insert id="insert" parameterType="com.codi.bus.core.domain.FundInfo" >
+      insert into fi_fund_info (fi_fund_code, fi_fund_name,
+      fi_short_name, fi_fund_status, fi_ta_no,
+      fi_ofund_type, fi_total_count, fi_rowCount,fi_risk_level
+      <if test="fundTypeName != null">
+      ,fi_fund_type_name
+      </if>
+      <if test="fundTypeCode != null">
+      	, fi_fund_type_code
+      </if>
+      )
+      values ( #{fundCode,jdbcType=CHAR}, #{fundName,jdbcType=CHAR},
+      #{shortName,jdbcType=CHAR}, #{fundStatus,jdbcType=CHAR}, #{taNo,jdbcType=CHAR},
+      #{fundType,jdbcType=CHAR}, #{totalCount,jdbcType=INTEGER},
+      #{rowCount,jdbcType=INTEGER},#{riskLevel,jdbcType=INTEGER}
+      <if test="fundTypeName != null">
+          , #{fundTypeName,jdbcType=CHAR}
+      </if>
+      <if test="fundTypeCode != null">
+      	,#{fundTypeCode,jdbcType=INTEGER}
+      </if>
+      )
+  </insert>
+
+  <!-- 删除基金信息 -->
+  <update id="delete" parameterType="com.codi.bus.core.domain.FundInfo">
+    delete from fi_fund_info
+  </update>
+
+  <!-- 根据基金类型查询基金 -->
+  <select id="selectFundInfoByType" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+      select
+    	<include refid="Base_Column_List"/>
+    from fi_fund_info
+    where fi_fund_type_code = #{fundTypeCode,jdbcType=INTEGER}
+  </select>
+
+  <!-- 分页查询基金 -->
+  <select id="queryPage" resultMap="BaseResultMap" parameterType="java.util.Map">
+      select
+  		<include refid="Base_Column_List"/>
+  	 from fi_fund_info
+  </select>
+
+    <select id="queryList" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        fi_fund_id, fi_fund_code, fi_fund_name, fi_short_name, fi_fund_status, fi_fund_type_name, fi_fund_type_code,
+    fi_ofund_type, fi_create_date, fi_last_updated_date,fi_risk_level
+        from fi_fund_info
+        order by fi_fund_code
+    </select>
+
+    <select id="queryListCount" resultType="java.lang.Integer">
+        select
+        count(fi_fund_code)
+        from fi_fund_info
+    </select>
+
+    <!-- 根据基金类型列表查询基金 -->
+  <select id="selectFundInfoByTypes" resultMap="BaseResultMap" parameterType="java.util.List" >
+      select
+    	<include refid="Base_Column_List"/>
+    from fi_fund_info
+    where fi_fund_type_code in
+	<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+		#{item}
+	</foreach>
+  </select>
+
+    <!-- 更新已有基金的基金类型 -->
+  <update id="updateTypeByFundCode" parameterType="com.codi.bus.core.domain.FundInfo">
+	 update fi_fund_info
+	 <set>
+         fi_fund_type_name = #{fundTypeName,jdbcType=CHAR} ,
+	 fi_fund_type_code = #{fundTypeCode,jdbcType=INTEGER},
+	 fi_last_updated_date = #{lastUpdatedDate}
+	 </set>
+	 where fi_fund_code = #{fundCode,jdbcType=CHAR}
+  </update>
+
+    <!-- 取得所有的基金 -->
+  <select id="queryAllFunds" resultMap="BaseResultMap" >
+      select
+    	<include refid="Base_Column_List"/>
+    from fi_fund_info
+  </select>
+
+
+</mapper>
